@@ -1,7 +1,7 @@
 # Schéma des voies locales
 
 > [!TIP]
-> Statut : **en construction** (version 0.1.0). Ce schéma est un projet de standard CNIG, en cours d'élaboration par le groupe de travail <à compléter>.
+> Statut : **en construction** (version 0.1.0). Ce schéma n'est pas un standard CNIG. Il s'inspire des recommandations du guide qualité de schema.data.gouv.fr et du processus et des modèles du CNIG (Conseil national de l'information géolocalisée).
 
 Ce dépôt contient le schéma de données (Table Schema) du recensement des voies locales : voies communales, chemins ruraux, voies intercommunales, etc. Le format d'échange est un **CSV**, décrit par [schema.json](schema.json). Une ligne correspond à une **voie** ou à un **tronçon** de voie, avec ou sans géométrie : la colonne `geometry` est facultative et reste vide en l'absence de géométrie.
 
@@ -10,17 +10,14 @@ Ce dépôt contient le schéma de données (Table Schema) du recensement des voi
 - Circulaire du 31 juillet 1961 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464) ;
 - Arrêté du 16 février 2023 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048).
 
-À compléter : mandat du GT, enjeux et objectifs, cas d'usage, modalités de production des données.
+À compléter : enjeux et objectifs, cas d'usage, modalités de production des données.
 
 ## Contenu du dépôt
 
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
 - [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ;
 - [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
-- [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0 ;
-- `standard/` : document du standard CNIG (à rédiger avec le modèle de standard du CNIG) ;
-- `ressources/` : documents utiles aux utilisateurs ;
-- `groupe_de_travail_CNIG/` : comptes-rendus et suivi du groupe de travail.
+- [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0.
 
 ## Format des fichiers
 
@@ -46,7 +43,7 @@ Exemple : `20261011_213500953_voies-locales.csv`.
 
 Les noms des champs reprennent ceux du modèle initial (`proposition_modele_voies_locales.xlsx`) : minuscules, snake_case, sans accent, avec un tiret bas à la place des points (`point_ini.designation` devient `point_ini_designation`, `point_ini.coordonnees` devient `point_ini_coordonnees`).
 
-Ce choix, retenu pour la version 0.1.0 et à soumettre au groupe de travail, **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
+Ce choix, retenu pour la version 0.1.0 et à discuter, **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
 
 - les champs n'ont pas de préfixe commun au standard ;
 - `servitudes` est au pluriel, comme dans le modèle initial ;
