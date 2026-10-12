@@ -15,7 +15,7 @@ Ce dépôt contient le schéma de données (Table Schema) du recensement des voi
 ## Contenu du dépôt
 
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
-- [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ;
+- [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte quatre lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), et une VC et un CR sans géométrie ;
 - [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
 - [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0.
 
