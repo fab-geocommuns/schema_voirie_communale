@@ -2,7 +2,7 @@
 
 Ce fichier répertorie les changements entre différentes versions du schéma.
 
-## Version 0.1.0 - 2026-10-11
+## Version 0.1.0 - 2026-10-12
 
 Version initiale, en construction, établie à partir de `proposition_modele_voies_locales.xlsx` :
 
