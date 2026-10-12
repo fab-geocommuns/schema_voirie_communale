@@ -37,7 +37,7 @@
     }
   ],
   "created": "2026-10-11",
-  "lastModified": "2026-10-11",
+  "lastModified": "2026-10-12",
   "version": "v0.1.0",
   "contributors": [
     {
@@ -140,7 +140,7 @@
       "title": "Longueur",
       "description": "Longueur en mètres de la voie (ou du tronçon la constituant) sur le territoire de la commune. Au moins 1 mètre.",
       "type": "number",
-      "example": "1170.5",
+      "example": "701.5",
       "constraints": { "required": true, "minimum": 1 }
     },
     {
@@ -185,7 +185,7 @@
       "title": "Superficie",
       "description": "Superficie estimée ou calculée de la voie, en mètres carrés. Au moins 1 mètre carré.",
       "type": "number",
-      "example": "4385.69",
+      "example": "2455.25",
       "constraints": { "required": false, "minimum": 1 }
     },
     {

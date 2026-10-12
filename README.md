@@ -21,9 +21,9 @@ Ce dépôt contient le schéma de données (Table Schema) du recensement des voi
 
 ## Format des fichiers
 
-- CSV encodé en UTF-8, séparateur virgule, guillemets doubles comme délimiteur de chaîne ;
+- CSV encodé en UTF-8, séparateur virgule ; toute cellule contenant une virgule, un guillemet double ou un saut de ligne est entourée de guillemets doubles, et les guillemets qu'elle contient sont doublés ;
 - toutes les colonnes sont présentes, dans l'ordre du schéma, même vides ;
-- coordonnées des points initial et final en WGS 84, dans un seul champ de type `geopoint` au format « longitude, latitude » entouré de guillemets doubles (ex. `"5.466656, 45.445213"`), point comme séparateur décimal, 6 décimales au maximum ; elles sont facultatives dans le schéma mais **obligatoires si la voie est représentée graphiquement** (arrêté du 16 février 2023), règle non vérifiable par Table Schema ;
+- coordonnées des points initial et final en WGS 84, dans un seul champ de type `geopoint` au format « longitude, latitude » entouré de guillemets doubles (ex. `"5.466656, 45.445213"`), point comme séparateur décimal, 6 décimales au maximum (limite non vérifiée par Table Schema) ; elles sont facultatives dans le schéma mais **obligatoires si la voie est représentée graphiquement** (arrêté du 16 février 2023), règle non vérifiable par Table Schema ;
 - `geometry` est une géométrie GeoJSON de type `LineString` ou `MultiLineString`, en WGS 84 (coordonnées `[longitude, latitude]`), écrite dans la cellule avec les guillemets doublés (ex. `"{""type"":""LineString"",""coordinates"":[[5.466656,45.445213],[5.471959,45.450308]]}"`) ; cellule vide en l'absence de géométrie. Table Schema vérifie seulement que la cellule est un GeoJSON valide : le type de géométrie et le système de coordonnées ne sont pas contrôlés ;
 - `servitudes` est une liste JSON entre guillemets, par exemple `"[""PDIPR"",""DFCI""]"` ; cellule vide s'il n'y en a aucune ; les valeurs ne doivent pas être répétées (règle non vérifiable par Table Schema) ;
 - valeurs des listes énumérées : première lettre en majuscule (`Voie communale`, `Bon`, `Public`) ;
@@ -37,7 +37,7 @@ Règle du guide qualité de schema.data.gouv.fr : `AAAAMMJJ_SIREN_voies-locales.
 - `SIREN` est le numéro SIREN à 9 chiffres du producteur ;
 - `voies-locales` est le nom du fichier, en minuscules non accentuées, avec des tirets.
 
-Exemple : `20261011_213500953_voies-locales.csv`.
+Exemple : `20261011_213500953_voies-locales.csv`. Les fichiers d'exemple du dépôt (`exemple-valide.csv`, `exemple-invalide.csv`) ne suivent pas cette règle : leur nom est celui attendu par les outils de validation.
 
 ### Nommage des champs
 
@@ -47,7 +47,7 @@ Ce choix, retenu pour la version 0.1.0 et à soumettre au GT Voirie communale, *
 
 - les champs n'ont pas de préfixe commun au standard ;
 - `servitudes` est au pluriel, comme dans le modèle initial ;
-- les noms restent sans accent ni caractère spécial et ne dépassent pas 50 caractères.
+- les noms ne contiennent ni accent ni caractère spécial, hormis le tiret bas, et ne dépassent pas 50 caractères.
 
 ## Valider un fichier
 
