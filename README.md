@@ -1,85 +1,62 @@
-# Schéma de la voirie communale
+# Schéma des voies locales
 
-> Spécification du fichier d'échange relatif aux données concernant la localisation géographique et les caractéristiques de la voirie communale (voies communales et chemins ruraux).
+> [!TIP]
+> Statut : **en construction** (version 0.1.0). Ce schéma est un projet de standard CNIG, en cours d'élaboration par le groupe de travail <à compléter>.
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Cliath/schema_voirie_communale/releases)
-[![Licence](https://img.shields.io/badge/licence-Licence%20Ouverte%202.0-green)](https://www.etalab.gouv.fr/licence-ouverte-open-licence)
-[![JSON Schema](https://img.shields.io/badge/JSON%20Schema-draft--07-lightgrey)](http://json-schema.org/draft-07/schema#)
+Ce dépôt contient le schéma de données (Table Schema) du recensement des voies locales : voies communales, chemins ruraux, voies intercommunales, etc. Le format d'échange est un **CSV**, décrit par [schema.json](schema.json). Une ligne correspond à une **voie** ou à un **tronçon** de voie, avec ou sans géométrie : la colonne `geometry` est facultative et reste vide en l'absence de géométrie.
 
----
+## Contexte et cadre réglementaire
 
-## Contexte
+- Circulaire du 31 juillet 1961 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464) ;
+- Arrêté du 16 février 2023 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048).
 
-La voirie communale comprend deux catégories de voies appartenant aux communes :
+À compléter : mandat du GT, enjeux et objectifs, cas d'usage, modalités de production des données.
 
-- **Les voies communales**, classées dans le domaine public routier communal ;
-- **Les chemins ruraux**, affectés à l'usage du public mais relevant du domaine privé de la commune (art. L161-1 du Code rural).
+## Contenu du dépôt
 
-Ce schéma vise à standardiser le format d'échange des données de recensement et de localisation de ces voies, en conformité avec la réglementation en vigueur issue notamment de la LOI n°2022-217 du 21 février 2022 (loi 3DS) et de l'arrêté du 16 février 2023.
+- [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
+- [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ;
+- [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
+- [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0 ;
+- `standard/` : document du standard CNIG (à rédiger avec le modèle de standard du CNIG) ;
+- `ressources/` : documents utiles aux utilisateurs ;
+- `groupe_de_travail_CNIG/` : comptes-rendus et suivi du groupe de travail.
 
----
+## Format des fichiers
 
-## Schéma
+- CSV encodé en UTF-8, séparateur virgule, guillemets doubles comme délimiteur de chaîne ;
+- toutes les colonnes sont présentes, dans l'ordre du schéma, même vides ;
+- coordonnées des points initial et final en WGS 84, dans un seul champ de type `geopoint` au format « longitude, latitude » entouré de guillemets doubles (ex. `"5.466656, 45.445213"`), point comme séparateur décimal, 6 décimales au maximum ; elles sont facultatives dans le schéma mais **obligatoires si la voie est représentée graphiquement** (arrêté du 16 février 2023), règle non vérifiable par Table Schema ;
+- `geometry` est une géométrie GeoJSON de type `LineString` ou `MultiLineString`, en WGS 84 (coordonnées `[longitude, latitude]`), écrite dans la cellule avec les guillemets doublés (ex. `"{""type"":""LineString"",""coordinates"":[[5.466656,45.445213],[5.471959,45.450308]]}"`) ; cellule vide en l'absence de géométrie. Table Schema vérifie seulement que la cellule est un GeoJSON valide : le type de géométrie et le système de coordonnées ne sont pas contrôlés ;
+- `servitudes` est une liste JSON entre guillemets, par exemple `"[""PDIPR"",""DFCI""]"` ; cellule vide s'il n'y en a aucune ; les valeurs ne doivent pas être répétées (règle non vérifiable par Table Schema) ;
+- valeurs des listes énumérées : première lettre en majuscule (`Voie communale`, `Bon`, `Public`) ;
+- toute colonne en plus du schéma est refusée (Table Schema ne permet pas de tolérer des extensions locales).
 
-Le fichier de schéma est disponible ici :
-[`schemas/schema_voirie_communale.json`](schemas/schema_voirie_communale.json)
+### Nommage des fichiers
 
-URL stable (branche `main`) :
+Règle du guide qualité de schema.data.gouv.fr : `AAAAMMJJ_SIREN_voies-locales.csv`, où
+
+- `AAAAMMJJ` est la date de création du fichier ;
+- `SIREN` est le numéro SIREN à 9 chiffres du producteur ;
+- `voies-locales` est le nom du fichier, en minuscules non accentuées, avec des tirets.
+
+Exemple : `20261011_213500953_voies-locales.csv`.
+
+### Nommage des champs
+
+Les noms des champs reprennent ceux du modèle initial (`proposition_modele_voies_locales.xlsx`) : minuscules, snake_case, sans accent, avec un tiret bas à la place des points (`point_ini.designation` devient `point_ini_designation`, `point_ini.coordonnees` devient `point_ini_coordonnees`).
+
+Ce choix, retenu pour la version 0.1.0 et à soumettre au groupe de travail, **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
+
+- les champs n'ont pas de préfixe commun au standard ;
+- `servitudes` est au pluriel, comme dans le modèle initial ;
+- les noms restent sans accent ni caractère spécial et ne dépassent pas 50 caractères.
+
+## Valider un fichier
+
+```bash
+pip install -r requirements.txt
+frictionless validate --schema schema.json mon-fichier.csv
 ```
-https://raw.githubusercontent.com/Cliath/schema_voirie_communale/main/schemas/schema_voirie_communale.json
-```
 
-### Format
-
-Les données doivent être fournies au format **GeoJSON** (`FeatureCollection`), conforme au schéma [geojson.org/schema/FeatureCollection.json](https://geojson.org/schema/FeatureCollection.json).
-
----
-
-## Propriétés
-
-| Champ | Type | Obligatoire | Description |
-|-------|------|:-----------:|-------------|
-| `id` | `string` (UUID v4) | ✅ | Identifiant unique et pérenne du tronçon |
-| `id_externe` | `string` | ❌ | Identifiant dans un référentiel externe (BD TOPO IGN, OSM…) |
-| `code_insee` | `string` | ❌ | Code INSEE de la commune (métropole + Corse) |
-
-### Détail des contraintes
-
-**`id`** — UUID version 4, format `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` :
-```
-550e8400-e29b-41d4-a716-446655440000
-```
-
-**`code_insee`** — Code à 5 caractères, couvrant la France métropolitaine, la Corse (`2A`, `2B`), les DROM (`971`–`976`) et les collectivités d'outre-mer (`977`–`989`) :
-```
-75056   → Paris
-2A004   → Ajaccio
-97105   → Basse-Terre (Guadeloupe)
-98735   → Papeete (Polynésie française)
-```
-
----
-
-## Sources légales
-
-- [Arrêté du 16 février 2023](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048) — contenu du tableau récapitulatif du recensement des chemins ruraux
-- [Article L161-6-1 CRPM](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045203730) — recensement des chemins ruraux
-- [Section 4 bis CRPM — Recensement](https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006071367/LEGISCTA000046814249/) (Articles R161-11-1 à D161-11-4)
-- [Chapitre Ier CRPM — Les chemins ruraux](https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006071367/LEGISCTA000006152165/) (Articles L161-1 à L161-13)
-- [Article D161-14 CRPM](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006587664/) — conservation et surveillance des chemins ruraux
-- [Code de la voirie routière — Titre IV : Voirie communale](https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070667/LEGISCTA000006116688/) (Articles L141-1 à L141-13)
-
----
-
-## Licence
-
-Ce schéma est publié sous [Licence Ouverte 2.0 (Etalab)](https://www.etalab.gouv.fr/licence-ouverte-open-licence).
-
----
-
-## Contributeurs
-
-| Nom | Organisation | Rôle |
-|-----|-------------|------|
-| Yann Schwarz | IGN | Auteur |
-
+Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr).

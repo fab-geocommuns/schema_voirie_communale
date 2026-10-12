@@ -1,0 +1,3 @@
+commune_insee,numero,classement,type,appellation,point_ini_designation,point_ini_coordonnees,point_fin_designation,point_fin_coordonnees,longueur,date_d_affectation,largeur_moyenne,etat,superficie,servitudes,delimitation,geometry,id_externe,domanialite,geom_source,gestionnaire,revetement,commentaire
+3509,CR12,chemin communal,Chemin,Chemin rural de la Source,Croisement entre la RD26 et la rue des Genevriers,"-1.5, 98.0",Limite de commune,"-1.49, 48.01",-5,12/05/1988,0,Excellent,,,,,,,,,,
+35095,XX 7,Voie communale,Rue,Rue de l'Abreuvoir,Intersection avec la VC 1,,,,320,2015-03-01,5,Moyen,,"[""Inconnue""]",,"{""type"":""Foo""}",,,,,,

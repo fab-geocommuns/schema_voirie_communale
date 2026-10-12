@@ -1,0 +1,1 @@
+frictionless[json]>=5.0,<6
