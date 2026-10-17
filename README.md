@@ -16,7 +16,6 @@ Ce dépôt contient le schéma de données (Table Schema) du recensement des voi
 
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
 - [dialect.json](dialect.json) : dialecte CSV (séparateur point-virgule, sans encadrement) ;
-- [check_format.py](check_format.py) : script de contrôle du format du fichier (encodage, séparateur, absence d'encadrement) ;
 - [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte quatre lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), et une VC et un CR sans géométrie ;
 - [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
 - [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0.
@@ -35,7 +34,7 @@ Le point-virgule est retenu à la place de la virgule, plus courante, parce que 
 Ce dialecte est décrit par le fichier [dialect.json](dialect.json), au format [CSV Dialect](https://specs.frictionlessdata.io/csv-dialect/), à fournir aux outils qui ne devinent pas le séparateur (voir [Valider un fichier](#valider-un-fichier)).
 
 > [!IMPORTANT]
-> Puisqu'aucun encadrement n'est utilisé, une valeur ne doit contenir **ni point-virgule, ni saut de ligne**, et ne doit **pas commencer par un guillemet double**. Les guillemets doubles internes aux valeurs JSON (`geometry`, `servitudes`) sont en revanche sans effet et ne sont pas doublés. Ces règles sont vérifiées par le script [check_format.py](check_format.py) (voir [Valider un fichier](#valider-un-fichier)).
+> Puisqu'aucun encadrement n'est utilisé, une valeur ne doit contenir **ni point-virgule, ni saut de ligne**, et ne doit **pas commencer par un guillemet double**. Les guillemets doubles internes aux valeurs JSON (`geometry`, `servitudes`) sont en revanche sans effet et ne sont pas doublés.
 
 Autres règles :
 
@@ -87,14 +86,8 @@ Ce choix, retenu pour la version 0.1.0 et à soumettre au groupe de travail du p
 
 ```bash
 pip install -r requirements.txt
-python check_format.py mon-fichier.csv
 frictionless validate --schema schema.json --dialect dialect.json mon-fichier.csv
 ```
-
-Deux contrôles complémentaires, à lancer dans cet ordre :
-
-1. `check_format.py` vérifie le **format du fichier** : encodage UTF-8, en-têtes identiques à ceux du schéma, même nombre de colonnes sur chaque ligne, aucune valeur commençant par un guillemet double. Il signale ainsi, avec un message explicite, un point-virgule ou un saut de ligne à l'intérieur d'une valeur ;
-2. `frictionless validate` vérifie le **contenu** (types, listes de valeurs, contraintes). Il détecte aussi un point-virgule ou un saut de ligne parasite, mais avec des messages moins explicites (`extra-cell`, `missing-cell`).
 
 L'option `--dialect` est indispensable : frictionless suppose par défaut un séparateur virgule.
 

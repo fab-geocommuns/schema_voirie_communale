@@ -10,7 +10,6 @@ Schéma Table Schema d'un fichier CSV décrivant les voies locales (voies commun
 
 - 23 champs, dont 11 obligatoires : `commune_insee`, `numero`, `classement`, `type`, `appellation`, `point_ini_designation`, `point_fin_designation`, `longueur`, `date_d_affectation`, `largeur_moyenne` et `etat` ;
 - format d'échange décrit par `dialect.json` : encodage UTF-8, séparateur de champs point-virgule, séparateur décimal point, aucun caractère d'encadrement des chaînes ;
-- script `check_format.py` contrôlant ce format (point-virgule ou saut de ligne dans une valeur, valeur commençant par un guillemet, nombre de colonnes, encodage) ;
 - 8 listes de valeurs (`classement`, `type`, `etat`, `servitudes`, `delimitation`, `domanialite`, `gestionnaire`, `revetement`) ;
 - `point_ini_coordonnees` et `point_fin_coordonnees` de type `geopoint` (WGS 84, ordre « longitude, latitude »), `servitudes` de type `array` et `geometry` de type `geojson`, facultative ;
 - exemples valide et invalide, licence ouverte 2.0 et contrôles de validation en intégration continue.
