@@ -1,0 +1,151 @@
+{
+  "frictionless": [
+    {
+      "row": 2,
+      "field": "commune_insee",
+      "type": "constraint-error"
+    },
+    {
+      "row": 2,
+      "field": "classement",
+      "type": "constraint-error"
+    },
+    {
+      "row": 2,
+      "field": "point_ini_coordonnees",
+      "type": "type-error"
+    },
+    {
+      "row": 2,
+      "field": "longueur",
+      "type": "constraint-error"
+    },
+    {
+      "row": 2,
+      "field": "date_d_affectation",
+      "type": "type-error"
+    },
+    {
+      "row": 2,
+      "field": "largeur_moyenne",
+      "type": "constraint-error"
+    },
+    {
+      "row": 2,
+      "field": "etat",
+      "type": "constraint-error"
+    },
+    {
+      "row": 3,
+      "field": "numero",
+      "type": "constraint-error"
+    },
+    {
+      "row": 3,
+      "field": "point_fin_designation",
+      "type": "constraint-error"
+    },
+    {
+      "row": 3,
+      "field": "servitudes",
+      "type": "constraint-error"
+    },
+    {
+      "row": 3,
+      "field": "geometry",
+      "type": "type-error"
+    },
+    {
+      "row": 4,
+      "field": "type",
+      "type": "constraint-error"
+    },
+    {
+      "row": 4,
+      "field": "largeur_moyenne",
+      "type": "type-error"
+    },
+    {
+      "row": 4,
+      "field": "superficie",
+      "type": "constraint-error"
+    },
+    {
+      "row": 4,
+      "field": "delimitation",
+      "type": "constraint-error"
+    },
+    {
+      "row": 4,
+      "field": "domanialite",
+      "type": "constraint-error"
+    },
+    {
+      "row": 4,
+      "field": "gestionnaire",
+      "type": "constraint-error"
+    },
+    {
+      "row": 4,
+      "field": "revetement",
+      "type": "constraint-error"
+    }
+  ],
+  "controles": [
+    {
+      "row": 2,
+      "field": "point_ini_coordonnees",
+      "code": "coordonnees-emprise"
+    },
+    {
+      "row": 3,
+      "field": "numero",
+      "code": "numero-classement"
+    },
+    {
+      "row": 3,
+      "field": "geometry",
+      "code": "geometry-type"
+    },
+    {
+      "row": 5,
+      "field": "numero",
+      "code": "numero-classement"
+    },
+    {
+      "row": 6,
+      "field": "numero",
+      "code": "numero-classement"
+    },
+    {
+      "row": 6,
+      "field": "geometry",
+      "code": "geometry-type"
+    },
+    {
+      "row": 7,
+      "field": "geometry",
+      "code": "geometry-emprise"
+    },
+    {
+      "row": 8,
+      "field": "point_ini_coordonnees",
+      "code": "coordonnees-emprise"
+    },
+    {
+      "row": 8,
+      "field": "point_fin_coordonnees",
+      "code": "coordonnees-emprise"
+    },
+    {
+      "row": 9,
+      "field": "servitudes",
+      "code": "servitudes-doublon"
+    },
+    {
+      "row": 9,
+      "field": "geometry",
+      "code": "geometry-extremites"
+    }
+  ]
+}

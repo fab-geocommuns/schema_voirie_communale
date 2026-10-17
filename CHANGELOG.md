@@ -2,11 +2,31 @@
 
 Ce fichier répertorie les changements entre différentes versions du schéma.
 
+## Version 0.1.1 - 2026-10-17
+
+Version encore en construction. Les fichiers valides en 0.1.0 le restent, à une exception près : la valeur `Chemin d’exploitation` du champ `classement` s'écrit désormais avec une apostrophe droite.
+
+Changements du schéma :
+
+- `numero` : motif généralisé (préfixe de 1 à 3 lettres, espace facultatif, numéro, suffixe alphabétique facultatif) pour accepter tous les classements (`RD 26`, `N 12`, `A 7`, `CE 1`), qu'un motif limité à `C`, `VC`, `R` et `CR` rejetait ; la cohérence avec le classement pour les voies communales et les chemins ruraux est contrôlée par le script ;
+- `largeur_moyenne` : minimum abaissé de 1 à 0,1 pour accepter les sentiers ; le champ reste obligatoire ;
+- `classement` : `Chemin d'exploitation` avec une apostrophe droite, comme les autres valeurs contenant une apostrophe (`Plan d'alignement`, `Collectivité d'outre-mer`) ;
+- `type` : suppression de la définition de la valeur `Tronçon`, ajoutée à tort à la description et absente du modèle initial ;
+- `id_externe` et `geom_source` : descriptions liées, l'identifiant externe étant celui du référentiel indiqué par `geom_source` (l'identifiant BAN peut y être saisi) ;
+- « voies intercommunales » n'est plus citée parmi les voies locales dans les descriptions ; la valeur `Voie intercommunale` reste dans la liste `classement`.
+
+Ajouts :
+
+- `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, type de géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
+- exemple invalide complété (8 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
+- README : règle « une ligne = une portion de voie », points ouverts (identifiant de ligne, `etat`), encadré sur la virgule décimale, description des contrôles ;
+- vérification automatique : déclenchement aussi sur les pull requests, Python 3.12, comparaison exacte des erreurs de l'exemple invalide.
+
 ## Version 0.1.0 - 2026-10-17
 
 Publication initiale, version en construction.
 
-Schéma Table Schema d'un fichier CSV décrivant les voies locales (voies communales, chemins ruraux, voies intercommunales, etc.), à raison d'une ligne par voie ou par tronçon de voie, avec ou sans géométrie :
+Schéma Table Schema d'un fichier CSV décrivant les voies locales (voies communales, chemins ruraux, etc.), à raison d'une ligne par voie ou par tronçon de voie, avec ou sans géométrie :
 
 - 23 champs, dont 11 obligatoires : `commune_insee`, `numero`, `classement`, `type`, `appellation`, `point_ini_designation`, `point_fin_designation`, `longueur`, `date_d_affectation`, `largeur_moyenne` et `etat` ;
 - format d'échange : CSV encodé en UTF-8, séparateur de champs virgule, guillemets doubles comme caractère d'encadrement, séparateur décimal point ;
