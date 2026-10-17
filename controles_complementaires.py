@@ -4,6 +4,7 @@ Table Schema ne sait pas exprimer ces règles. Le script les vérifie en complé
 
 - cohérence du numéro avec le classement (voie communale : préfixe C ou VC ; chemin rural : préfixe R ou CR) ;
 - type de géométrie (LineString ou MultiLineString) ;
+- coordonnées des points initial et final obligatoires lorsque la ligne a une géométrie ;
 - coordonnées des points et de la géométrie dans l'emprise de la France (métropole et outre-mer), ce qui détecte aussi
   les longitudes et latitudes inversées et les systèmes de coordonnées projetés (Lambert 93) ;
 - extrémités de la géométrie cohérentes avec les points initial et final ;
@@ -111,6 +112,11 @@ def controler_ligne(ligne):
                 erreurs.append((champ, "coordonnees-emprise", probleme))
 
     contenu = (ligne.get("geometry") or "").strip()
+    if contenu:
+        for champ in ("point_ini_coordonnees", "point_fin_coordonnees"):
+            if not (ligne.get(champ) or "").strip():
+                erreurs.append((champ, "points-obligatoires", "obligatoire lorsque la voie est représentée graphiquement (arrêté du 16 février 2023)"))
+
     geometrie = lire_json(contenu) if contenu else None
     if isinstance(geometrie, dict) and "type" in geometrie:
         if geometrie["type"] not in GEOMETRIES_ATTENDUES:

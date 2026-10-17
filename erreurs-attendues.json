@@ -104,6 +104,16 @@
     },
     {
       "row": 3,
+      "field": "point_ini_coordonnees",
+      "code": "points-obligatoires"
+    },
+    {
+      "row": 3,
+      "field": "point_fin_coordonnees",
+      "code": "points-obligatoires"
+    },
+    {
+      "row": 3,
       "field": "geometry",
       "code": "geometry-type"
     },
@@ -146,6 +156,11 @@
       "row": 9,
       "field": "geometry",
       "code": "geometry-extremites"
+    },
+    {
+      "row": 10,
+      "field": "point_fin_coordonnees",
+      "code": "points-obligatoires"
     }
   ]
 }
