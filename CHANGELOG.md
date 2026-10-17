@@ -17,8 +17,8 @@ Changements du schéma :
 
 Ajouts :
 
-- `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, type de géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
-- exemple invalide complété (8 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
+- `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, type de géométrie, coordonnées des points obligatoires si la voie a une géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
+- exemple invalide complété (9 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
 - README : règle « une ligne = une portion de voie », points ouverts (identifiant de ligne, `etat`), encadré sur la virgule décimale, description des contrôles ;
 - vérification automatique : déclenchement aussi sur les pull requests, Python 3.12, comparaison exacte des erreurs de l'exemple invalide.
 
