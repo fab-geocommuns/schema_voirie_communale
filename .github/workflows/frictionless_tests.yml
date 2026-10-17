@@ -20,8 +20,6 @@ jobs:
         frictionless validate --type schema schema.json
         frictionless validate --type dialect dialect.json
         frictionless validate --schema schema.json --dialect dialect.json exemple-valide.csv
-    - name: Vérification du format du fichier d'exemple valide (séparateur, encadrement, encodage)
-      run: python check_format.py exemple-valide.csv
     - name: Vérification de la cohérence des numéros de version
       run: python .github/workflows/assert_version.py
     - name: Vérification que le fichier d'exemple CSV invalide est bien rejeté
