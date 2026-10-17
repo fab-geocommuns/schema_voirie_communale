@@ -1,0 +1,9 @@
+{
+  "csvddfVersion": 1.2,
+  "delimiter": ";",
+  "doubleQuote": false,
+  "lineTerminator": "\r\n",
+  "quoteChar": "\"",
+  "skipInitialSpace": false,
+  "header": true
+}
