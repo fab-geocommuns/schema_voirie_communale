@@ -51,10 +51,10 @@
     {
       "name": "commune_insee",
       "title": "Code INSEE de la commune",
-      "description": "Code INSEE de la commune sur laquelle s'applique le recensement.",
+      "description": "Code INSEE de la commune sur laquelle s'applique le recensement : 5 caractères, avec le zéro initial conservé (01001) et 2A ou 2B pour la Corse. Le motif vérifie la forme du code et l'existence du département, pas celle de la commune.",
       "type": "string",
       "example": "35095",
-      "constraints": { "required": true, "pattern": "^(\\d{2}|2A|2B)\\d{3}$" }
+      "constraints": { "required": true, "pattern": "^((0[1-9]|1\\d|2[1-9]|[3-8]\\d|9[0-5])(00[1-9]|0[1-9]\\d|[1-9]\\d{2})|(2A|2B)(00[1-9]|0[1-9]\\d|[1-9]\\d{2})|97[1-8]\\d{2}|98(4|[6-9])\\d{2})$" }
     },
     {
       "name": "numero",

@@ -9,6 +9,7 @@ Version encore en construction. Les fichiers valides en 0.1.0 le restent, à une
 Changements du schéma :
 
 - `numero` : motif généralisé (préfixe de 1 à 3 lettres, espace facultatif, numéro, suffixe alphabétique facultatif) pour accepter tous les classements (`RD 26`, `N 12`, `A 7`, `CE 1`), qu'un motif limité à `C`, `VC`, `R` et `CR` rejetait ; la cohérence avec le classement pour les voies communales et les chemins ruraux est contrôlée par le script ;
+- `commune_insee` : motif resserré, qui écarte les codes impossibles (département `00`, `20`, `96` à `99`, commune `000`) et accepte les 35 014 codes de l'état actuel du code officiel géographique (communes de métropole, des DROM et des COM, arrondissements municipaux) ; il ne vérifie pas l'existence de la commune ;
 - `largeur_moyenne` : minimum abaissé de 1 à 0,1 pour accepter les sentiers ; le champ reste obligatoire ;
 - `classement` : `Chemin d'exploitation` avec une apostrophe droite, comme les autres valeurs contenant une apostrophe (`Plan d'alignement`, `Collectivité d'outre-mer`) ;
 - `type` : suppression de la définition de la valeur `Tronçon`, ajoutée à tort à la description et absente du modèle tableur ;
