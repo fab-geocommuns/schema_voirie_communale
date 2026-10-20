@@ -5,21 +5,38 @@
 
 Ce dépôt contient le schéma de données (Table Schema) du recensement des voies locales : voies communales, chemins ruraux, etc. Le format d'échange est un **CSV**, décrit par [schema.json](schema.json). Une ligne correspond à une **voie** ou à un **tronçon** de voie, avec ou sans géométrie : la colonne `geometry` est facultative et reste vide en l'absence de géométrie.
 
-## Contexte et cadre réglementaire
+Davantage d'informations sur le site du projet : [Voies locales en commun](https://www.voies-locales.beta.gouv.fr/).
+
+## Contexte
+
+À compléter.
+
+## Cadre juridique
 
 - Circulaire du 31 juillet 1961 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464) ;
 - Arrêté du 16 février 2023 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048).
 
-À compléter : enjeux et objectifs, gouvernance du projet Voies locales en commun, cas d'usage, modalités de production des données.
+## Finalité
 
-## Contenu du dépôt
+À compléter.
+
+## Cas d'usage
+
+À compléter.
+
+## Organisation du dépôt
 
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
-- [controles_complementaires.py](controles_complementaires.py) : script de contrôles que Table Schema ne sait pas exprimer (voir [Valider un fichier](#valider-un-fichier)) ;
+- [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : le modèle de données au format tableur, publié en dehors du dépôt. Il évolue **en parallèle** du schéma : toute modification de l'un est reportée dans l'autre ;
+- [controles_complementaires.py](controles_complementaires.py) : script de contrôles que Table Schema ne sait pas exprimer, décrit dans [CONTROLES.md](CONTROLES.md) ;
 - [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte quatre lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), et une VC et un CR sans géométrie ; l'exemple invalide comporte neuf lignes et illustre, ligne par ligne, les erreurs détectées par le schéma et par le script ;
 - [erreurs-attendues.json](erreurs-attendues.json) : liste exacte des erreurs de l'exemple invalide, comparée à celles détectées par la vérification automatique ; à mettre à jour à chaque changement du schéma ou du script ;
 - [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
 - [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0.
+
+## Modalités de production des données
+
+À compléter.
 
 ## Format des fichiers
 
@@ -50,9 +67,18 @@ Autres règles :
 - valeurs des listes énumérées : première lettre en majuscule (`Voie communale`, `Bon`, `Public`), apostrophe droite (`Chemin d'exploitation`) ;
 - toute colonne en plus du schéma est refusée (Table Schema ne permet pas de tolérer des extensions locales).
 
-### Une ligne : une voie ou un tronçon
+### Une ligne par voie ou par tronçon
 
-Une ligne représente une portion de voie, sans chevauchement avec les autres lignes. Une voie en plusieurs tronçons est répétée sur plusieurs lignes, que l'on regroupe par `commune_insee` et `numero`. **Il ne faut jamais fournir à la fois la voie entière et ses tronçons** : leurs longueurs seraient comptées deux fois. Aucune colonne ne distingue une voie d'un tronçon.
+Chaque ligne décrit une portion de voie : soit la voie entière, soit l'un de ses tronçons. Une voie découpée en tronçons est décrite par **une ligne par tronçon**. Les lignes d'une même voie ont les mêmes `commune_insee`, `numero` et `classement` ; chacune porte ses propres longueur, largeur, état et géométrie. Les tronçons d'une voie ne se chevauchent pas.
+
+**Il ne faut jamais fournir à la fois la voie entière et ses tronçons** : leurs longueurs seraient comptées deux fois. Aucune colonne ne distingue une voie d'un tronçon.
+
+Exemple : la voie communale `VC 3`, décrite en deux tronçons (seules quelques colonnes sont affichées ; les autres sont renseignées sur chaque ligne) :
+
+| commune_insee | numero | classement | appellation | point_ini_designation | point_fin_designation | longueur |
+| --- | --- | --- | --- | --- | --- | --- |
+| 35095 | VC 3 | Voie communale | Rue des Écoles | Place de la Mairie | Carrefour avec la rue des Tilleuls | 420 |
+| 35095 | VC 3 | Voie communale | Rue des Écoles | Carrefour avec la rue des Tilleuls | Intersection avec la RD 4 | 311.5 |
 
 ### Nommage des fichiers
 
@@ -60,42 +86,24 @@ Règle retenue : `AAAAMMJJ_SIREN_voies-locales.csv`, où
 
 - `AAAAMMJJ` est la date de création du fichier ;
 - `SIREN` est le numéro SIREN à 9 chiffres du producteur (commune, EPCI, département) ;
-- `voies-locales` est le nom du fichier, en minuscules non accentuées, avec des tirets du milieu ;
-- les trois éléments sont séparés par un tiret bas.
+- `voies-locales` est le nom du fichier, en minuscules non accentuées, avec des tirets du milieu (`-`) ;
+- les trois éléments sont séparés par un tiret bas (underscore, `_`).
 
 Exemple : `20261011_213500953_voies-locales.csv`.
 
-Cette règle est celle du guide qualité de schema.data.gouv.fr (`AAAAMMJJ_idProducteur_nom-du-fichier.extension`). Le nom du producteur en clair n'y figure pas : aucune des conventions de référence ne le fait, toutes identifiant le producteur par un code.
-
-| Référence | Règle de nommage du livrable | Identification du producteur |
-| --- | --- | --- |
-| Guide qualité schema.data.gouv.fr | `AAAAMMJJ_idProducteur_nom-du-fichier.extension` | SIREN |
-| Standard CNIG Accessibilité en voirie (gabarit GeoPackage) | `<INSEE/SIREN>_accessibilite_voirie_AAAAMMJJ.gpkg` | code INSEE ou SIREN |
-| Modèle de standard CNIG (Star-Eau) | `Stareau-fr<code>-<SIREN><type><date>.<extension>` | SIREN |
-| Métadonnées CNIG | `fr-<SIREN>-thème<date>.xml` | SIREN |
-| Standards CNIG ACEN et PDIPR | pas de règle définie | — |
-
-Une variante du type `AAAAMMJJ_voies-locales_SIREN_nomproducteur.csv` a été écartée : elle ajoute un nom en clair redondant avec le SIREN, instable dans le temps (fusions, changements de dénomination) et source de variantes d'écriture (accents, espaces, casse), et elle n'est conforme à aucune des conventions ci-dessus.
+Cette règle est celle du guide qualité de schema.data.gouv.fr.
 
 Les fichiers d'exemple du dépôt (`exemple-valide.csv`, `exemple-invalide.csv`) ne suivent pas cette règle : leur nom est celui attendu par les outils de validation.
 
 ### Nommage des champs
 
-Les noms des champs reprennent ceux du modèle initial (`proposition_modele_voies_locales.xlsx`) : minuscules, snake_case, sans accent, avec un tiret bas à la place des points (`point_ini.designation` devient `point_ini_designation`, `point_ini.coordonnees` devient `point_ini_coordonnees`).
+Les noms des champs reprennent ceux du [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : minuscules, snake_case, sans accent, avec un tiret bas à la place des points (`point_ini.designation` devient `point_ini_designation`, `point_ini.coordonnees` devient `point_ini_coordonnees`).
 
-Ce choix, retenu pour la version 0.1.0 et à soumettre au groupe de travail du projet Voies locales en commun, **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
+Ce choix **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
 
 - les champs n'ont pas de préfixe commun au standard ;
-- `servitudes` est au pluriel, comme dans le modèle initial ;
+- `servitudes` est au pluriel, comme dans le modèle tableur ;
 - les noms ne contiennent ni accent ni caractère spécial, hormis le tiret bas, et ne dépassent pas 50 caractères.
-
-## Points ouverts
-
-Ces choix sont connus et pourront être rediscutés avec le groupe de travail :
-
-- **pas d'identifiant de ligne** : décision prise avec l'ANCT, à rediscuter. Sans identifiant, il n'y a ni mise à jour incrémentale, ni comparaison automatique entre deux versions d'un fichier ; `id_externe` ne joue pas ce rôle ;
-- **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite ;
-- **noms de champs en snake_case** (voir ci-dessus) : les renommer après diffusion casserait tous les fichiers existants.
 
 ## Valider un fichier
 
@@ -108,14 +116,29 @@ python controles_complementaires.py mon-fichier.csv
 Deux contrôles complémentaires :
 
 1. `frictionless validate` vérifie le **schéma** : colonnes, types, listes de valeurs, contraintes. Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr) ;
-2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer :
-   - cohérence du `numero` avec le `classement` pour les voies communales (préfixe `C` ou `VC`) et les chemins ruraux (préfixe `R` ou `CR`) ;
-   - type de `geometry` : `LineString` ou `MultiLineString` ;
-   - coordonnées des points initial et final **obligatoires dès que la ligne a une géométrie** (arrêté du 16 février 2023) ;
-   - coordonnées des points et de la géométrie dans l'emprise de la France (métropole et outre-mer, emprises approximatives ; les Terres australes et antarctiques françaises et Clipperton ne sont pas couvertes), ce qui détecte aussi les longitudes et latitudes inversées et les coordonnées projetées (Lambert 93) ;
-   - extrémités de la géométrie cohérentes avec les points initial et final, dans un sens ou dans l'autre, à 10 mètres près environ ;
-   - valeurs répétées dans `servitudes`.
-
-   Les cellules vides ou mal formées sont ignorées par le script : c'est le rôle de la validation du schéma. Validata n'exécute pas ce script.
+2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer : cohérence du numéro et du classement, géométrie (type, coordonnées, extrémités), coordonnées des points obligatoires si la ligne a une géométrie, servitudes répétées. Validata n'exécute pas ce script. Chaque contrôle est décrit dans [CONTROLES.md](CONTROLES.md).
 
 La vérification automatique GitHub contrôle le schéma, l'exemple valide, le script, la cohérence des numéros de version, et que l'exemple invalide produit **exactement** les erreurs de [erreurs-attendues.json](erreurs-attendues.json).
+
+## Informations et participation
+
+### Actualisation
+
+Statut : **en construction**.
+
+**Points ouverts.** Ces choix sont connus et pourront être rediscutés :
+
+- **pas d'identifiant de ligne** : décision prise avec l'ANCT, à rediscuter. Sans identifiant, il n'y a ni mise à jour incrémentale, ni comparaison automatique entre deux versions d'un fichier ; `id_externe` ne joue pas ce rôle ;
+- **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite.
+
+### Comment contribuer
+
+À compléter.
+
+### Nous contacter
+
+À compléter.
+
+### Licence
+
+Ce schéma est publié sous [Licence Ouverte 2.0](LICENSE.md).

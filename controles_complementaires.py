@@ -12,7 +12,10 @@ Table Schema ne sait pas exprimer ces règles. Le script les vérifie en complé
 
 Les cellules vides ou mal formées sont ignorées : c'est le rôle de la validation du schéma de les signaler.
 
+Documentation complète (règles, codes d'erreur, exemples, limites) : CONTROLES.md.
+
 Usage : python controles_complementaires.py fichier.csv [--json]
+Code de sortie : 0 si aucune erreur, 1 sinon.
 """
 import argparse
 import csv
