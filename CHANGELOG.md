@@ -21,6 +21,7 @@ Ajouts :
 - exemple invalide complété (9 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
 - README : réorganisé selon la trame du modèle de README du CNIG (sections à compléter marquées « À compléter »), règle « une ligne par voie ou par tronçon » corrigée avec un exemple, points ouverts (identifiant de ligne, `etat`), encadré sur la virgule décimale, lien vers le modèle tableur, qui évolue en parallèle du schéma ;
 - `CONTROLES.md` : documentation détaillée des contrôles complémentaires (règles, codes d'erreur, exemples, emprises, limites) ;
+- README : adresse à saisir dans Validata pour valider en ligne (adresse directe du fichier, et non la page « blob » de GitHub, refusée par Validata) ;
 - vérification automatique : déclenchement aussi sur les pull requests, Python 3.12, comparaison exacte des erreurs de l'exemple invalide.
 
 ## Version 0.1.0 - 2026-10-17

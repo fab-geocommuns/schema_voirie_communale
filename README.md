@@ -115,10 +115,22 @@ python controles_complementaires.py mon-fichier.csv
 
 Deux contrôles complémentaires :
 
-1. `frictionless validate` vérifie le **schéma** : colonnes, types, listes de valeurs, contraintes. Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr) ;
+1. `frictionless validate` vérifie le **schéma** : colonnes, types, listes de valeurs, contraintes. Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr) (voir ci-dessous) ;
 2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer : cohérence du numéro et du classement, géométrie (type, coordonnées, extrémités), coordonnées des points obligatoires si la ligne a une géométrie, servitudes répétées. Validata n'exécute pas ce script. Chaque contrôle est décrit dans [CONTROLES.md](CONTROLES.md).
 
 La vérification automatique GitHub contrôle le schéma, l'exemple valide, le script, la cohérence des numéros de version, et que l'exemple invalide produit **exactement** les erreurs de [erreurs-attendues.json](erreurs-attendues.json).
+
+### Valider en ligne avec Validata
+
+Sur [validata.fr](https://validata.fr), saisir l'adresse **directe** du fichier `schema.json`, par exemple :
+
+```text
+https://raw.githubusercontent.com/fab-geocommuns/schema_voirie_communale/main/schema.json
+```
+
+L'adresse affichée quand on ouvre le fichier sur GitHub, celle qui contient `/blob/`, est une page web et non le fichier : Validata la refuse avec le message « Le schéma fourni n'est pas un fichier JSON valide ». Pour obtenir l'adresse directe, ouvrir `schema.json` sur GitHub et cliquer sur **Raw**.
+
+Remplacer `main` par un numéro de version (par exemple `v0.1.1`) pour valider avec une version précise du schéma.
 
 ## Informations et participation
 
