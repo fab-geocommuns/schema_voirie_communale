@@ -97,7 +97,7 @@
     },
     {
       "name": "appellation",
-      "title": "Nom ou appellation usuelle",
+      "title": "Nom (ou appellation usuelle)",
       "description": "Appellation par les noms des lieux ou des voies publiques que la voie réunit (circulaire du 31 juillet 1961).",
       "type": "string",
       "example": "Chemin rural de derrière les jardins de Flandre",
@@ -190,7 +190,7 @@
     },
     {
       "name": "servitudes",
-      "title": "Servitudes et inscriptions supplémentaires",
+      "title": "Servitudes grévant la voie, inscriptions et intégrations supplémentaires de la voie",
       "description": "Liste (au format JSON) des servitudes grevant la voie, des attributions supplémentaires ou des inscriptions de la voie à des schémas ou plans nationaux ou locaux. Chaque valeur doit appartenir à la liste autorisée et ne doit pas être répétée (cette dernière règle n'est pas vérifiable par Table Schema, elle est contrôlée par le script controles_complementaires.py).",
       "type": "array",
       "example": "[\"PDIPR\",\"DFCI\"]",
@@ -238,7 +238,7 @@
     },
     {
       "name": "id_externe",
-      "title": "Identifiant externe",
+      "title": "Identifiants externes",
       "description": "Identifiant de la voie (ou du tronçon la constituant) dans le référentiel indiqué par le champ geom_source (par exemple BD TOPO IGN, OSM, BAN, base locale). Le référentiel de l'identifiant et celui de la géométrie sont supposés identiques ; une voie sans géométrie n'a pas de référentiel déclaré.",
       "type": "string",
       "example": "TRONROUT0000000123456789",

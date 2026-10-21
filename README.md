@@ -118,7 +118,7 @@ Les fichiers d'exemple du dépôt (`exemple-valide.csv`, `exemple-invalide.csv`)
 
 ### Nommage des champs
 
-Les noms des champs reprennent ceux du [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : minuscules, snake_case, sans accent, avec un tiret bas à la place des points (`point_ini.designation` devient `point_ini_designation`, `point_ini.coordonnees` devient `point_ini_coordonnees`).
+Les noms des champs sont ceux du [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : minuscules, snake_case (mots séparés par des tirets bas), sans accent (par exemple `point_ini_designation`, `date_d_affectation`).
 
 Ce choix **s'écarte volontairement du guide qualité de schema.data.gouv.fr**, qui recommande des noms en camelCase précédés d'un préfixe commun au standard (par exemple `voieLocNumero`), au singulier. Il se rapproche des exemples du modèle de standard du CNIG (`classe_1_id`, `ban_id`), qui n'impose toutefois aucune règle de nommage des attributs. Conséquences :
 
@@ -162,7 +162,8 @@ Statut : **en construction**.
 **Points ouverts.** Ces choix sont connus et pourront être rediscutés :
 
 - **pas d'identifiant de ligne** : décision prise avec l'ANCT, à rediscuter. Sans identifiant, il n'y a ni mise à jour incrémentale, ni comparaison automatique entre deux versions d'un fichier ; `id_externe` ne joue pas ce rôle ;
-- **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite.
+- **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite ;
+- **voie verte** : cette notion a fait l'objet de nombreux retours et n'est pas positionnée dans le modèle à ce jour. Les pistes à discuter, sans qu'aucune soit retenue, sont l'ajout d'une valeur à la liste du champ `servitudes`, `type` ou `classement`, ce qui n'a aucun effet sur les fichiers existants.
 
 ### Comment contribuer
 
