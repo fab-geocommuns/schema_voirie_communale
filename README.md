@@ -11,6 +11,27 @@ Davantage d'informations sur le site du projet : [Voies locales en commun](https
 
 À compléter.
 
+## Liens avec d'autres groupes de travail et projets
+
+Les groupes de travail et projets ci-dessous sont distincts du groupe de travail du projet Voies locales en commun. Quand l'articulation avec le schéma des voies locales n'a pas pu être établie, elle est indiquée comme « à préciser ».
+
+### Chemins ruraux et itinéraires
+
+- **PDIPR** : [GT CNIG PDIPR](https://cnig.gouv.fr/groupe-de-travail-plans-departementaux-des-a30072.html) et [dépôt GitHub](https://github.com/cnigfr/PDIPR). Le PDIPR a pour objectif de protéger les chemins ruraux et d'assurer la continuité des itinéraires de randonnée. Dans le schéma des voies locales, l'inscription d'une voie au PDIPR est indiquée par la valeur `PDIPR` du champ `servitudes`.
+- **Accessibilité du cheminement en espace naturel (ACEN)** : [GT CNIG Accessibilité du cheminement en espace naturel](https://cnig.gouv.fr/gt-accessibilite-a18058.html#H_Accessibilite-du-cheminement-en-espace-naturel) et [dépôt GitHub](https://github.com/cnigfr/standard-accessibilite-espace-naturel). Le standard ACEN décrit l'accessibilité des cheminements en espace naturel pour les personnes en situation de handicap. Son schéma `cheminement` renseigne l'inscription au PDIPR, comme le champ `servitudes` du schéma des voies locales.
+- **Itinéraires de randonnée** : [schéma itinéraires de randonnée](https://github.com/PnX-SI/schema_randonnee/) (dépôt GitHub, Parc national des Écrins). Ce schéma décrit les itinéraires de randonnée. Il renseigne l'inscription au PDIPR (champs `pdipr_inscription` et `pdipr_date_inscription`), comme le champ `servitudes` du schéma des voies locales.
+
+### Servitudes
+
+- **Servitudes d'utilité publique (SUP)** : [GT CNIG DDU, sous-groupe 3 (servitudes d'utilité publique)](https://cnig.gouv.fr/ressources-dematerialisation-documents-d-urbanisme-a2732.html) et [dépôt GitHub](https://github.com/cnigfr/schema-servitudes-utilite-publique). Le standard SUP décrit les servitudes d'utilité publique : les servitudes, les actes qui les instituent, leurs gestionnaires, leurs générateurs et leurs assiettes. Dans le schéma des voies locales, le champ `servitudes` indique seulement quelles servitudes grèvent la voie, sans les décrire. L'articulation entre les catégories de servitudes du standard SUP et les valeurs du champ `servitudes` reste à préciser.
+- **Dessertes en forêt** : [GT CNIG Dessertes en forêt](https://cnig.gouv.fr/gt-dessertes-pour-les-transports-de-bois-a18535.html), [dépôt GitHub](https://github.com/cnigfr/DessertesEnForet-schema) et [classe « Tronçon de route »](https://github.com/cnigfr/DessertesEnForet-schema/tree/master/schema/classe-troncon-route). Le standard Dessertes en forêt décrit les voies utilisées pour le transport de bois et pour la défense des forêts contre l'incendie (DFCI). Sa classe « Tronçon de route » comporte des champs de même nature que ceux du schéma des voies locales (numéro, gestionnaire, largeur, commune) et un champ `servitude_dfci`. Dans le schéma des voies locales, le champ `servitudes` a les valeurs `DFCI` et `Desserte forestière`.
+
+### Voirie et mobilités
+
+- **Accessibilité en voirie** : [GT CNIG Accessibilité](https://cnig.gouv.fr/gt-accessibilite-a18058.html) et [dépôt GitHub](https://github.com/cnigfr/schema-accessibilite-voirie). Le standard CNIG Accessibilité décrit l'accessibilité des cheminements pour les personnes à mobilité réduite ou en situation de handicap, dans la voirie, l'espace public et les établissements recevant du public. L'articulation avec le schéma des voies locales reste à préciser.
+- **Routes et voies** : [GT CNIG Routes/Voies](https://cnig.gouv.fr/gt-routes-voies-a26007.html). L'articulation avec le schéma des voies locales reste à préciser.
+- **Mobilités** : [GT CNIG Mobilités](https://cnig.gouv.fr/gt-mobilites-a30228.html). L'articulation avec le schéma des voies locales reste à préciser.
+
 ## Cadre juridique
 
 - Circulaire du 31 juillet 1961 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464) ;
