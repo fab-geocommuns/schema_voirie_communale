@@ -161,6 +161,16 @@
       "row": 10,
       "field": "point_fin_coordonnees",
       "code": "points-obligatoires"
+    },
+    {
+      "row": 11,
+      "field": "largeur_moyenne",
+      "code": "largeur-obligatoire"
+    },
+    {
+      "row": 12,
+      "field": "etat",
+      "code": "etat-obligatoire"
     }
   ]
 }

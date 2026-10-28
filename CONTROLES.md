@@ -44,7 +44,7 @@ La valeur `row` (« ligne » dans l'affichage en clair) est la ligne du fichier 
 **Exemple de sortie** (extrait de l'exécution sur [exemple-invalide.csv](exemple-invalide.csv)) :
 
 ```text
-exemple-invalide.csv : 14 erreur(s)
+exemple-invalide.csv : 16 erreur(s)
   - ligne 3, numero : le numéro « 12 » ne convient pas au classement « Voie communale » (préfixe attendu : C ou VC)
   - ligne 6, geometry : géométrie de type Point (LineString ou MultiLineString attendu)
   - ligne 8, point_ini_coordonnees : la longitude et la latitude semblent inversées
@@ -60,11 +60,13 @@ python controles_complementaires.py mon-fichier.csv
 
 ## Les contrôles
 
-Chaque erreur porte un code, le champ concerné et un message. Les cellules vides ou mal formées sont ignorées par le script (c'est la validation du schéma qui les signale), sauf pour `points-obligatoires`, dont l'objet est justement de signaler un point vide.
+Chaque erreur porte un code, le champ concerné et un message. Les cellules vides ou mal formées sont ignorées par le script (c'est la validation du schéma qui les signale), sauf pour `largeur-obligatoire`, `etat-obligatoire` et `points-obligatoires`, dont l'objet est justement de signaler une cellule vide.
 
 | Code | Champ | Règle |
 | --- | --- | --- |
 | [`numero-classement`](#numero-classement) | `numero` | Le préfixe du numéro correspond au classement. |
+| [`largeur-obligatoire`](#largeur-obligatoire) | `largeur_moyenne` | La largeur moyenne est renseignée pour une voie communale. |
+| [`etat-obligatoire`](#etat-obligatoire) | `etat` | L'état est renseigné pour un chemin rural. |
 | [`points-obligatoires`](#points-obligatoires) | `point_ini_coordonnees`, `point_fin_coordonnees` | Les deux points sont renseignés si la ligne a une géométrie. |
 | [`coordonnees-emprise`](#coordonnees-emprise) | `point_ini_coordonnees`, `point_fin_coordonnees` | Les coordonnées sont en WGS 84, dans l'emprise de la France, dans l'ordre longitude puis latitude. |
 | [`geometry-type`](#geometry-type) | `geometry` | La géométrie est une `LineString` ou une `MultiLineString`. |
@@ -85,6 +87,34 @@ Chaque erreur porte un code, le champ concerné et un message. Les cellules vide
 | Valide | `Route départementale` | `RD 26` | |
 
 **Correction.** Corriger le numéro (`VC 3`) ou le classement (`Chemin rural`), selon celui des deux qui est faux.
+
+### largeur-obligatoire
+
+**Règle.** Pour une **voie communale**, `largeur_moyenne` est renseignée (circulaire du 31 juillet 1961). Pour les chemins ruraux, l'arrêté du 16 février 2023 la rend seulement possible. Dans le schéma, la colonne est donc facultative, car une ligne d'un autre classement n'a pas à la renseigner.
+
+**Lignes concernées.** Seulement les lignes dont le classement est `Voie communale`. Les autres classements n'ont pas de règle, faute de texte les concernant. Une largeur renseignée mais invalide (`0`, `3,5`) est signalée par la validation du schéma, pas par le script.
+
+| | Classement | Largeur moyenne | Résultat |
+| --- | --- | --- | --- |
+| Erreur | `Voie communale` | *(vide)* | `obligatoire pour le classement « Voie communale » (circulaire du 31 juillet 1961)` |
+| Valide | `Voie communale` | `5` | |
+| Valide | `Chemin rural` | *(vide)* | |
+
+**Correction.** Renseigner la largeur moyenne en mètres, avec un point comme séparateur décimal (`3.5`).
+
+### etat-obligatoire
+
+**Règle.** Pour un **chemin rural**, `etat` est renseigné (arrêté du 16 février 2023). La circulaire du 31 juillet 1961, qui concerne les voies communales, ne le demande pas. Dans le schéma, la colonne est donc facultative, car une ligne d'un autre classement n'a pas à la renseigner.
+
+**Lignes concernées.** Seulement les lignes dont le classement est `Chemin rural`. Les autres classements n'ont pas de règle, faute de texte les concernant. Une valeur renseignée mais absente de la liste (`Excellent`) est signalée par la validation du schéma, pas par le script.
+
+| | Classement | État | Résultat |
+| --- | --- | --- | --- |
+| Erreur | `Chemin rural` | *(vide)* | `obligatoire pour le classement « Chemin rural » (arrêté du 16 février 2023)` |
+| Valide | `Chemin rural` | `Bon` | |
+| Valide | `Voie communale` | *(vide)* | |
+
+**Correction.** Renseigner l'une des valeurs de la liste du champ `etat` (`Bon`, `Moyen`, `Mauvais`, `Très mauvais`, `En projet`, etc.).
 
 ### points-obligatoires
 

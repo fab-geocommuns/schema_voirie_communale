@@ -10,7 +10,8 @@ Changements du schéma :
 
 - `numero` : motif généralisé (préfixe de 1 à 3 lettres, espace facultatif, numéro, suffixe alphabétique facultatif) pour accepter tous les classements (`RD 26`, `N 12`, `A 7`, `CE 1`), qu'un motif limité à `C`, `VC`, `R` et `CR` rejetait ; la cohérence avec le classement pour les voies communales et les chemins ruraux est contrôlée par le script ;
 - `commune_insee` : motif resserré, qui écarte les codes impossibles (département `00`, `20`, `96` à `99`, commune `000`) et accepte les 35 014 codes de l'état actuel du code officiel géographique (communes de métropole, des DROM et des COM, arrondissements municipaux) ; il ne vérifie pas l'existence de la commune ;
-- `largeur_moyenne` : minimum abaissé de 1 à 0,1 pour accepter les sentiers ; le champ reste obligatoire ;
+- `largeur_moyenne` : minimum abaissé de 1 à 0,1 pour accepter les sentiers ; le champ devient facultatif, car l'arrêté du 16 février 2023 la rend seulement possible pour les chemins ruraux ; elle reste obligatoire pour une voie communale (circulaire du 31 juillet 1961), ce que contrôle le script ;
+- `etat` : le champ devient facultatif, car la circulaire du 31 juillet 1961 ne le demande pas pour les voies communales ; il reste obligatoire pour un chemin rural (arrêté du 16 février 2023), ce que contrôle le script ;
 - `classement` : `Chemin d'exploitation` avec une apostrophe droite, comme les autres valeurs contenant une apostrophe (`Plan d'alignement`, `Collectivité d'outre-mer`) ;
 - `type` : suppression de la définition de la valeur `Tronçon`, ajoutée à tort à la description et absente du modèle tableur ;
 - `id_externe` et `geom_source` : descriptions liées, l'identifiant externe étant celui du référentiel indiqué par `geom_source` (l'identifiant BAN peut y être saisi) ;
@@ -19,8 +20,8 @@ Changements du schéma :
 
 Ajouts :
 
-- `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, type de géométrie, coordonnées des points obligatoires si la voie a une géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
-- exemple invalide complété (9 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
+- `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, largeur moyenne obligatoire pour une voie communale, état obligatoire pour un chemin rural, type de géométrie, coordonnées des points obligatoires si la voie a une géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
+- exemple invalide complété (11 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
 - README : réorganisé selon la trame du modèle de README du CNIG (sections à compléter marquées « À compléter »), règle « une ligne par voie ou par tronçon » corrigée avec un exemple, points ouverts (identifiant de ligne, `etat`, voie verte), encadré sur la virgule décimale, lien vers le modèle tableur, qui évolue en parallèle du schéma ;
 - `CONTROLES.md` : documentation détaillée des contrôles complémentaires (règles, codes d'erreur, exemples, emprises, limites) ;
 - README : adresse à saisir dans Validata pour valider en ligne (adresse directe du fichier, et non la page « blob » de GitHub, refusée par Validata) ;

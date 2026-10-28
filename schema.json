@@ -154,19 +154,19 @@
     {
       "name": "largeur_moyenne",
       "title": "Largeur moyenne",
-      "description": "Largeur moyenne en mètres de la voie (ou du tronçon la constituant) sur le territoire de la commune. Strictement positive : au moins 0,1 mètre.",
+      "description": "Largeur moyenne en mètres de la voie (ou du tronçon la constituant) sur le territoire de la commune. Strictement positive : au moins 0,1 mètre. Obligatoire pour une voie communale (circulaire du 31 juillet 1961), facultative pour les autres classements : le schéma l'accepte vide, la règle pour les voies communales n'est pas vérifiable par Table Schema et est contrôlée par le script controles_complementaires.py.",
       "type": "number",
       "example": "3.5",
-      "constraints": { "required": true, "minimum": 0.1 }
+      "constraints": { "required": false, "minimum": 0.1 }
     },
     {
       "name": "etat",
       "title": "État d'entretien et de conservation",
-      "description": "État d'entretien et de conservation de la voie (ou du tronçon la constituant).",
+      "description": "État d'entretien et de conservation de la voie (ou du tronçon la constituant). Obligatoire pour un chemin rural (arrêté du 16 février 2023), facultatif pour les autres classements : le schéma l'accepte vide, la règle pour les chemins ruraux n'est pas vérifiable par Table Schema et est contrôlée par le script controles_complementaires.py.",
       "type": "string",
       "example": "Bon",
       "constraints": {
-        "required": true,
+        "required": false,
         "enum": [
           "En construction",
           "En projet",

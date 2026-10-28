@@ -3,6 +3,8 @@
 Table Schema ne sait pas exprimer ces règles. Le script les vérifie en complément de la validation du schéma :
 
 - cohérence du numéro avec le classement (voie communale : préfixe C ou VC ; chemin rural : préfixe R ou CR) ;
+- largeur moyenne obligatoire pour une voie communale (circulaire du 31 juillet 1961) ;
+- état obligatoire pour un chemin rural (arrêté du 16 février 2023) ;
 - type de géométrie (LineString ou MultiLineString) ;
 - coordonnées des points initial et final obligatoires lorsque la ligne a une géométrie ;
 - coordonnées des points et de la géométrie dans l'emprise de la France (métropole et outre-mer), ce qui détecte aussi
@@ -29,6 +31,12 @@ REGLES_NUMERO = {
 }
 
 GEOMETRIES_ATTENDUES = ("LineString", "MultiLineString")
+
+# champ : (code d'erreur, classements pour lesquels il est obligatoire, texte qui l'impose)
+OBLIGATOIRES_PAR_CLASSEMENT = {
+    "largeur_moyenne": ("largeur-obligatoire", ("Voie communale",), "circulaire du 31 juillet 1961"),
+    "etat": ("etat-obligatoire", ("Chemin rural",), "arrêté du 16 février 2023"),
+}
 
 # (nom, longitude min, longitude max, latitude min, latitude max) : emprises approximatives
 EMPRISES = (
@@ -105,6 +113,10 @@ def controler_ligne(ligne):
         motif, prefixes = REGLES_NUMERO[classement]
         if not motif.match(numero):
             erreurs.append(("numero", "numero-classement", f"le numéro « {numero} » ne convient pas au classement « {classement} » (préfixe attendu : {prefixes})"))
+
+    for champ, (code, classements, texte) in OBLIGATOIRES_PAR_CLASSEMENT.items():
+        if classement in classements and not (ligne.get(champ) or "").strip():
+            erreurs.append((champ, code, f"obligatoire pour le classement « {classement} » ({texte})"))
 
     ini = lire_geopoint(ligne.get("point_ini_coordonnees") or "")
     fin = lire_geopoint(ligne.get("point_fin_coordonnees") or "")
