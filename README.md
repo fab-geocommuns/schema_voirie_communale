@@ -91,7 +91,7 @@ Autres règles :
 
 ### Une ligne par voie ou par tronçon
 
-Chaque ligne décrit une portion de voie : soit la voie entière, soit l'un de ses tronçons. Une voie découpée en tronçons est décrite par **une ligne par tronçon**. Les lignes d'une même voie ont les mêmes `commune_insee`, `numero` et `classement` ; chacune porte ses propres longueur, largeur, état et géométrie. Les tronçons d'une voie ne se chevauchent pas.
+Chaque ligne décrit une portion de voie : soit la voie entière, soit l'un de ses tronçons. Une voie découpée en tronçons est décrite par **une ligne par tronçon**. Les lignes d'une même voie ont les mêmes `commune_insee`, `numero` et `classement` : ces trois champs identifient la voie, et le schéma ne comporte pas d'identifiant fabriqué (`id_externe` est l'identifiant d'un référentiel externe, pas celui de la ligne). Chaque ligne porte ses propres longueur, largeur, état et géométrie. Les tronçons d'une voie ne se chevauchent pas.
 
 **Il ne faut jamais fournir à la fois la voie entière et ses tronçons** : leurs longueurs seraient comptées deux fois. Aucune colonne ne distingue une voie d'un tronçon.
 
@@ -162,7 +162,6 @@ Statut : **en construction**.
 
 **Points ouverts.** Ces choix sont connus et pourront être rediscutés :
 
-- **pas d'identifiant de ligne** : décision prise avec l'ANCT, à rediscuter. Sans identifiant, il n'y a ni mise à jour incrémentale, ni comparaison automatique entre deux versions d'un fichier ; `id_externe` ne joue pas ce rôle ;
 - **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite ;
 - **voie verte** : cette notion a fait l'objet de nombreux retours et n'est pas positionnée dans le modèle à ce jour. Les pistes à discuter, sans qu'aucune soit retenue, sont l'ajout d'une valeur à la liste du champ `servitudes`, `type` ou `classement`, ce qui n'a aucun effet sur les fichiers existants.
 

@@ -22,7 +22,7 @@ Ajouts :
 
 - `controles_complementaires.py` : contrôles que Table Schema ne sait pas exprimer (numéro et classement, largeur moyenne obligatoire pour une voie communale, état obligatoire pour un chemin rural, type de géométrie, coordonnées des points obligatoires si la voie a une géométrie, emprise France, longitude et latitude inversées, extrémités de la géométrie, servitudes répétées) ;
 - exemple invalide complété (11 lignes) et fichier `erreurs-attendues.json` listant exactement les erreurs attendues ;
-- README : réorganisé selon la trame du modèle de README du CNIG (sections à compléter marquées « À compléter »), règle « une ligne par voie ou par tronçon » corrigée avec un exemple, points ouverts (identifiant de ligne, `etat`, voie verte), encadré sur la virgule décimale, lien vers le modèle tableur, qui évolue en parallèle du schéma ;
+- README : réorganisé selon la trame du modèle de README du CNIG (sections à compléter marquées « À compléter »), règle « une ligne par voie ou par tronçon » corrigée avec un exemple, points ouverts (`etat`, voie verte), identification de la voie par `classement`, `numero` et `commune_insee`, sans identifiant fabriqué, encadré sur la virgule décimale, lien vers le modèle tableur, qui évolue en parallèle du schéma ;
 - `CONTROLES.md` : documentation détaillée des contrôles complémentaires (règles, codes d'erreur, exemples, emprises, limites) ;
 - README : adresse à saisir dans Validata pour valider en ligne (adresse directe du fichier, et non la page « blob » de GitHub, refusée par Validata) ;
 - README : section « Liens avec d'autres groupes de travail et projets » (PDIPR, ACEN, itinéraires de randonnée, SUP, Dessertes en forêt, Accessibilité en voirie, Routes/Voies, Mobilités) ;
