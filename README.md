@@ -9,7 +9,11 @@ Davantage d'informations sur le site du projet : [Voies locales en commun](https
 
 ## Contexte
 
-À compléter.
+Les voies communales représentent plus des deux tiers du réseau routier français (902 972 km sur 1 310 184 km, d'après la BD TOPO de l'IGN, édition d'octobre 2026), sans compter les chemins ruraux, qui font partie du domaine privé des communes. Leur recensement est souvent ancien, partiel, et rarement publié en open data.
+
+La loi 3DS du 21 février 2022, le décret n° 2022-1652 du 26 décembre 2022 et l'arrêté du 16 février 2023 encadrent désormais le recensement des chemins ruraux : il suspend la prescription acquisitive pendant 24 mois.
+
+Ce schéma est élaboré par le projet [Voies locales en commun](https://www.voies-locales.beta.gouv.fr/), porté par la Fabrique de la donnée territoriale de l'IGN, en partenariat avec l'équipe Mes Adresses de l'ANCT.
 
 ## Liens avec d'autres groupes de travail et projets
 
@@ -35,15 +39,21 @@ Les groupes de travail et projets ci-dessous sont distincts du groupe de travail
 ## Cadre juridique
 
 - Circulaire du 31 juillet 1961 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464) ;
+- Loi n° 2022-217 du 21 février 2022 (loi 3DS) : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000045197395) ; son [article 102](https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000045197469) crée l'[article L. 161-6-1 du code rural et de la pêche maritime](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045203730) ;
+- Décret n° 2022-1652 du 26 décembre 2022 relatif aux modalités de l'enquête publique portant sur le recensement des chemins ruraux : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000046806953) ;
 - Arrêté du 16 février 2023 : [Légifrance](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048).
 
 ## Finalité
 
-À compléter.
+Proposer un format commun, simple et fondé sur les formats déjà utilisés par les collectivités, pour décrire, valider et publier le recensement des voies communales et des chemins ruraux. Un recensement publié et lisible par tous aide à protéger les chemins contre leur appropriation et à mobiliser ces données dans les politiques publiques.
 
 ## Cas d'usage
 
-À compléter.
+- Tenir le tableau de classement des voies communales et le recensement des chemins ruraux.
+- Identifier la voirie communale prise en compte dans le calcul de la dotation de solidarité rurale.
+- Clarifier la responsabilité de la commune (entretien, domanialité) en cas de litige ou d'accident.
+- Repérer les voies utiles à la défense des forêts contre l'incendie (DFCI), aux itinéraires de randonnée (PDIPR) ou aux mobilités douces.
+- Partager le recensement avec l'EPCI, le Département, le cadastre ou le SDIS.
 
 ## Organisation du dépôt
 
@@ -57,7 +67,12 @@ Les groupes de travail et projets ci-dessous sont distincts du groupe de travail
 
 ## Modalités de production des données
 
-À compléter.
+Les données sont produites par la commune ou l'EPCI compétent, directement ou par l'intermédiaire d'un prestataire (agence technique départementale, bureau d'études).
+
+1. Rassembler les sources : tableau de classement, délibérations, cadastre, BD TOPO, Base Adresse Nationale, vérifications de terrain. La [documentation du projet](https://docs.numerique.gouv.fr/docs/95b4a99f-d02a-4df1-ac57-db5ae332220e/) les détaille.
+2. Saisir une ligne par voie ou par tronçon, au format décrit ci-dessous.
+3. Valider le fichier avec Validata, puis avec le script de contrôles complémentaires.
+4. Publier le fichier sur [data.gouv.fr](https://www.data.gouv.fr), sous le nom `AAAAMMJJ_SIREN_voies-locales.csv`.
 
 ## Format des fichiers
 
@@ -167,11 +182,13 @@ Statut : **en construction**.
 
 ### Comment contribuer
 
-À compléter.
+- Signaler un problème ou proposer une évolution : [issues du dépôt](https://github.com/fab-geocommuns/schema_voirie_communale/issues).
+- Discuter du format : [salon Tchap Voies locales en commun](https://tchap.gouv.fr/#/room/%23VoieslocalesencommunModlee8kY5kwnSBh:agent.dev-durable.tchap.gouv.fr).
+- Échanger entre collectivités : [groupe Voies locales en commun du CNFPT](https://e-communautes.cnfpt.fr/information-geographique/voies-locales-en-commun).
 
 ### Nous contacter
 
-À compléter.
+[contact@voies-locales.beta.gouv.fr](mailto:contact@voies-locales.beta.gouv.fr)
 
 ### Licence
 
