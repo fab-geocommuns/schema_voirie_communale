@@ -102,7 +102,7 @@ Autres règles :
 - `servitudes` est une liste JSON entre guillemets, par exemple `"[""PDIPR"",""DFCI""]"` ; cellule vide s'il n'y en a aucune ; les valeurs ne doivent pas être répétées (règle non vérifiable par Table Schema, contrôlée par le script) ;
 - `id_externe` est l'identifiant de la voie dans le référentiel indiqué par `geom_source` (BD TOPO IGN, OSM, BAN, base locale…) ; l'identifiant de la Base Adresse Nationale peut y être saisi, avec `geom_source` valant « BAN ». Le référentiel de l'identifiant et celui de la géométrie sont supposés identiques, et une voie sans géométrie n'a donc pas de référentiel déclaré ;
 - valeurs des listes énumérées : première lettre en majuscule (`Voie communale`, `Bon`, `Public`), apostrophe droite (`Chemin d'exploitation`) ;
-- des colonnes en plus de celles du schéma sont acceptées (propriété `fieldsMatch` du schéma, valeur `subset`).
+- des colonnes en plus de celles du schéma sont acceptées (propriété `fieldsMatch` du schéma, valeur `subset`) ; Validata déclare alors le fichier « partiellement valide », sans erreur, avec une recommandation « Colonne surnuméraire ».
 
 ### Une ligne par voie ou par tronçon
 
