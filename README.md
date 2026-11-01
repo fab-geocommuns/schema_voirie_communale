@@ -11,7 +11,7 @@ Davantage d'informations sur le site du projet : [Voies locales en commun](https
 
 Les voies communales représentent plus des deux tiers du réseau routier français (902 972 km sur 1 310 184 km, d'après la BD TOPO de l'IGN, édition d'octobre 2026), sans compter les chemins ruraux, qui font partie du domaine privé des communes. Leur recensement est souvent ancien, partiel, et rarement publié en open data.
 
-La loi 3DS du 21 février 2022, le décret n° 2022-1652 du 26 décembre 2022 et l'arrêté du 16 février 2023 encadrent désormais le recensement des chemins ruraux : il suspend la prescription acquisitive pendant 24 mois.
+La loi 3DS du 21 février 2022, le décret n° 2022-1652 du 26 décembre 2022 et l'arrêté du 16 février 2023 encadrent désormais le recensement des chemins ruraux : la délibération du conseil municipal qui décide de l'engager suspend le délai de prescription acquisitive pendant deux ans au plus.
 
 Ce schéma est élaboré par le projet [Voies locales en commun](https://www.voies-locales.beta.gouv.fr/), porté par la Fabrique de la donnée territoriale de l'IGN, en partenariat avec l'équipe Mes Adresses de l'ANCT.
 
@@ -60,7 +60,7 @@ Proposer un format commun, simple et fondé sur les formats déjà utilisés par
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
 - [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : le modèle de données au format tableur, publié en dehors du dépôt. Il évolue **en parallèle** du schéma : toute modification de l'un est reportée dans l'autre ;
 - [controles_complementaires.py](controles_complementaires.py) : script de contrôles que Table Schema ne sait pas exprimer, décrit dans [CONTROLES.md](CONTROLES.md) ;
-- [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte quatre lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), et une VC et un CR sans géométrie ; l'exemple invalide comporte onze lignes et illustre, ligne par ligne, les erreurs détectées par le schéma et par le script ;
+- [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte six lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), une VC et un CR sans géométrie, un CR sans largeur moyenne et une VC sans état ; l'exemple invalide comporte treize lignes et illustre, ligne par ligne, les erreurs détectées par le schéma et par le script ;
 - [erreurs-attendues.json](erreurs-attendues.json) : liste exacte des erreurs de l'exemple invalide, comparée à celles détectées par la vérification automatique ; à mettre à jour à chaque changement du schéma ou du script ;
 - [CHANGELOG.md](CHANGELOG.md) : liste des changements ;
 - [LICENSE.md](LICENSE.md) : Licence Ouverte 2.0.
@@ -93,8 +93,8 @@ Les valeurs contenant des virgules sont fréquentes : appellations (ex. « Voie 
 
 Autres règles :
 
-- toutes les colonnes sont présentes, dans l'ordre du schéma, même vides ;
-- `numero` : préfixe de 1 à 3 lettres, espace facultatif, numéro, puis suffixe alphabétique facultatif (`VC 12`, `CR1`, `C12bis`, `RD 26`, `N 12`). Le motif du schéma est volontairement large pour accepter tous les classements ; pour une **voie communale** le préfixe doit être `C` ou `VC`, pour un **chemin rural** `R` ou `CR`, ce que contrôle le script (`CR 3` avec « Voie communale » est signalé). « Voie intercommunale » et les autres classements n'ont pas de règle de numéro ;
+- toutes les colonnes du schéma sont présentes, même vides, dans n'importe quel ordre ;
+- `numero` est facultatif dans le schéma mais **obligatoire pour une voie communale** (circulaire du 31 juillet 1961) **et pour un chemin rural** (arrêté du 16 février 2023), règle non vérifiable par Table Schema, contrôlée par le script. Sa forme : préfixe de 1 à 3 lettres, espace facultatif, numéro, puis suffixe alphabétique facultatif (`VC 12`, `CR1`, `C12bis`, `RD 26`, `N 12`). Le motif du schéma est volontairement large pour accepter tous les classements ; pour une **voie communale** le préfixe doit être `C` ou `VC`, pour un **chemin rural** `R` ou `CR`, ce que contrôle le script (`CR 3` avec « Voie communale » est signalé). « Voie intercommunale » et les autres classements n'ont pas de règle de numéro. L'écriture est libre (`VC 3`, `VC3`), mais une même voie garde la même écriture sur toutes ses lignes, ce que contrôle aussi le script ;
 - `largeur_moyenne` est strictement positive : Table Schema ne sait exprimer qu'un minimum inclusif, il est fixé à 0,1. Elle est facultative dans le schéma mais **obligatoire pour une voie communale** (circulaire du 31 juillet 1961), règle non vérifiable par Table Schema, contrôlée par le script ; pour un chemin rural, l'arrêté du 16 février 2023 la rend seulement possible ;
 - `etat` est facultatif dans le schéma mais **obligatoire pour un chemin rural** (arrêté du 16 février 2023), règle non vérifiable par Table Schema, contrôlée par le script ; la circulaire du 31 juillet 1961, qui concerne les voies communales, ne le demande pas ;
 - coordonnées des points initial et final en WGS 84, dans un seul champ de type `geopoint` au format « longitude, latitude » entouré de guillemets doubles (ex. `"5.466656, 45.445213"`), point comme séparateur décimal, 6 décimales au maximum (limite non vérifiée par Table Schema) ; elles sont facultatives dans le schéma mais **obligatoires si la voie est représentée graphiquement** (arrêté du 16 février 2023), règle non vérifiable par Table Schema, contrôlée par le script. Table Schema **ne détecte pas l'inversion** de la longitude et de la latitude (`"48.0, -1.5"` est accepté, -1,5 étant une latitude possible) : le script la signale ;
@@ -102,13 +102,13 @@ Autres règles :
 - `servitudes` est une liste JSON entre guillemets, par exemple `"[""PDIPR"",""DFCI""]"` ; cellule vide s'il n'y en a aucune ; les valeurs ne doivent pas être répétées (règle non vérifiable par Table Schema, contrôlée par le script) ;
 - `id_externe` est l'identifiant de la voie dans le référentiel indiqué par `geom_source` (BD TOPO IGN, OSM, BAN, base locale…) ; l'identifiant de la Base Adresse Nationale peut y être saisi, avec `geom_source` valant « BAN ». Le référentiel de l'identifiant et celui de la géométrie sont supposés identiques, et une voie sans géométrie n'a donc pas de référentiel déclaré ;
 - valeurs des listes énumérées : première lettre en majuscule (`Voie communale`, `Bon`, `Public`), apostrophe droite (`Chemin d'exploitation`) ;
-- toute colonne en plus du schéma est refusée (Table Schema ne permet pas de tolérer des extensions locales).
+- des colonnes en plus de celles du schéma sont acceptées (propriété `fieldsMatch` du schéma, valeur `subset`).
 
 ### Une ligne par voie ou par tronçon
 
-Chaque ligne décrit une portion de voie : soit la voie entière, soit l'un de ses tronçons. Une voie découpée en tronçons est décrite par **une ligne par tronçon**. Les lignes d'une même voie ont les mêmes `commune_insee`, `numero` et `classement` : ces trois champs identifient la voie, et le schéma ne comporte pas d'identifiant fabriqué (`id_externe` est l'identifiant d'un référentiel externe, pas celui de la ligne). Chaque ligne porte ses propres longueur, largeur, état et géométrie. Les tronçons d'une voie ne se chevauchent pas.
+Chaque ligne décrit une portion de voie : soit la voie entière, soit l'un de ses tronçons. Une voie découpée en tronçons est décrite par **une ligne par tronçon**. Les lignes d'une même voie ont les mêmes `commune_insee`, `numero` et `classement` : ces trois champs identifient la voie, le numéro étant écrit de la même façon sur chaque ligne (`VC 3` partout, et non `VC 3` puis `VC3`), et le schéma ne comporte pas d'identifiant fabriqué (`id_externe` est l'identifiant d'un référentiel externe, pas celui de la ligne). Chaque ligne porte ses propres longueur, largeur, état et géométrie. Les tronçons d'une voie ne se chevauchent pas.
 
-**Il ne faut jamais fournir à la fois la voie entière et ses tronçons** : leurs longueurs seraient comptées deux fois. Aucune colonne ne distingue une voie d'un tronçon.
+**Il ne faut jamais fournir à la fois la voie entière et ses tronçons** : leurs longueurs seraient comptées deux fois. Aucune colonne ne permet de savoir si une ligne décrit la voie entière ou un tronçon : la valeur `Tronçon` du champ `type` est prévue par l'arrêté du 16 février 2023, mais n'y est pas définie (voir les points ouverts).
 
 Exemple : la voie communale `VC 3`, décrite en deux tronçons (seules quelques colonnes sont affichées ; les autres sont renseignées sur chaque ligne) :
 
@@ -153,7 +153,7 @@ python controles_complementaires.py mon-fichier.csv
 Deux contrôles complémentaires :
 
 1. `frictionless validate` vérifie le **schéma** : colonnes, types, listes de valeurs, contraintes. Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr) (voir ci-dessous) ;
-2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer : cohérence du numéro et du classement, largeur moyenne obligatoire pour une voie communale, état obligatoire pour un chemin rural, géométrie (type, coordonnées, extrémités), coordonnées des points obligatoires si la ligne a une géométrie, servitudes répétées. Validata n'exécute pas ce script. Chaque contrôle est décrit dans [CONTROLES.md](CONTROLES.md).
+2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer : numéro obligatoire pour une voie communale ou un chemin rural, cohérence du numéro et du classement, écriture unique du numéro d'une voie, largeur moyenne obligatoire pour une voie communale, état obligatoire pour un chemin rural, géométrie (type, coordonnées, extrémités), coordonnées des points obligatoires si la ligne a une géométrie, servitudes répétées. Validata n'exécute pas ce script. Chaque contrôle est décrit dans [CONTROLES.md](CONTROLES.md).
 
 La vérification automatique GitHub contrôle le schéma, l'exemple valide, le script, la cohérence des numéros de version, et que l'exemple invalide produit **exactement** les erreurs de [erreurs-attendues.json](erreurs-attendues.json).
 
@@ -178,6 +178,7 @@ Statut : **en construction**.
 **Points ouverts.** Ces choix sont connus et pourront être rediscutés :
 
 - **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite ;
+- **valeur `Tronçon` du champ `type`** : elle figure dans la liste parce que l'arrêté du 16 février 2023 la prévoit, mais le texte ne la définit pas. Son usage reste à préciser ;
 - **voie verte** : cette notion a fait l'objet de nombreux retours et n'est pas positionnée dans le modèle à ce jour. Les pistes à discuter, sans qu'aucune soit retenue, sont l'ajout d'une valeur à la liste du champ `servitudes`, `type` ou `classement`, ce qui n'a aucun effet sur les fichiers existants.
 
 ### Comment contribuer

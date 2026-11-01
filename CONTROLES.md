@@ -16,9 +16,10 @@ Le script [controles_complementaires.py](controles_complementaires.py) vérifie 
 Table Schema vérifie chaque cellule isolément : son type, sa liste de valeurs, son motif. Il ne peut pas :
 
 - comparer deux colonnes entre elles (le numéro et le classement, la géométrie et les points initial et final) ;
+- comparer des lignes entre elles (les écritures du numéro d'une même voie) ;
 - contrôler le contenu d'une géométrie GeoJSON (son type, ses coordonnées) ;
 - détecter des valeurs répétées dans une liste ;
-- rendre une colonne obligatoire seulement quand une autre est renseignée.
+- rendre une colonne obligatoire seulement quand une autre est renseignée ou a une valeur donnée.
 
 Ces erreurs sont pourtant probables chez les producteurs : un `Point` à la place d'une ligne, des coordonnées en Lambert 93, une longitude et une latitude permutées, un chemin rural numéroté `VC 3`. Un fichier peut les contenir et être déclaré valide par le schéma seul.
 
@@ -44,7 +45,7 @@ La valeur `row` (« ligne » dans l'affichage en clair) est la ligne du fichier 
 **Exemple de sortie** (extrait de l'exécution sur [exemple-invalide.csv](exemple-invalide.csv)) :
 
 ```text
-exemple-invalide.csv : 16 erreur(s)
+exemple-invalide.csv : 18 erreur(s)
   - ligne 3, numero : le numéro « 12 » ne convient pas au classement « Voie communale » (préfixe attendu : C ou VC)
   - ligne 6, geometry : géométrie de type Point (LineString ou MultiLineString attendu)
   - ligne 8, point_ini_coordonnees : la longitude et la latitude semblent inversées
@@ -60,11 +61,13 @@ python controles_complementaires.py mon-fichier.csv
 
 ## Les contrôles
 
-Chaque erreur porte un code, le champ concerné et un message. Les cellules vides ou mal formées sont ignorées par le script (c'est la validation du schéma qui les signale), sauf pour `largeur-obligatoire`, `etat-obligatoire` et `points-obligatoires`, dont l'objet est justement de signaler une cellule vide.
+Chaque erreur porte un code, le champ concerné et un message. Les cellules vides ou mal formées sont ignorées par le script (c'est la validation du schéma qui les signale), sauf pour `numero-obligatoire`, `largeur-obligatoire`, `etat-obligatoire` et `points-obligatoires`, dont l'objet est justement de signaler une cellule vide.
 
 | Code | Champ | Règle |
 | --- | --- | --- |
 | [`numero-classement`](#numero-classement) | `numero` | Le préfixe du numéro correspond au classement. |
+| [`numero-obligatoire`](#numero-obligatoire) | `numero` | Le numéro est renseigné pour une voie communale et pour un chemin rural. |
+| [`numero-ecriture`](#numero-ecriture) | `numero` | Le numéro d'une voie a la même écriture sur toutes les lignes du fichier. |
 | [`largeur-obligatoire`](#largeur-obligatoire) | `largeur_moyenne` | La largeur moyenne est renseignée pour une voie communale. |
 | [`etat-obligatoire`](#etat-obligatoire) | `etat` | L'état est renseigné pour un chemin rural. |
 | [`points-obligatoires`](#points-obligatoires) | `point_ini_coordonnees`, `point_fin_coordonnees` | Les deux points sont renseignés si la ligne a une géométrie. |
@@ -87,6 +90,34 @@ Chaque erreur porte un code, le champ concerné et un message. Les cellules vide
 | Valide | `Route départementale` | `RD 26` | |
 
 **Correction.** Corriger le numéro (`VC 3`) ou le classement (`Chemin rural`), selon celui des deux qui est faux.
+
+### numero-obligatoire
+
+**Règle.** `numero` est renseigné pour une **voie communale** (circulaire du 31 juillet 1961) et pour un **chemin rural** (arrêté du 16 février 2023). Dans le schéma, la colonne est facultative.
+
+**Lignes concernées.** Seulement les lignes dont le classement est `Voie communale` ou `Chemin rural`. Un numéro renseigné mais mal formé (`12`) est signalé par la validation du schéma ou par [numero-classement](#numero-classement).
+
+| | Classement | Numéro | Résultat |
+| --- | --- | --- | --- |
+| Erreur | `Voie communale` | *(vide)* | `obligatoire pour le classement « Voie communale » (circulaire du 31 juillet 1961)` |
+| Erreur | `Chemin rural` | *(vide)* | `obligatoire pour le classement « Chemin rural » (arrêté du 16 février 2023)` |
+| Valide | `Chemin d'exploitation` | *(vide)* | |
+
+**Correction.** Renseigner le numéro de la voie, tel qu'il figure au tableau de classement ou de recensement (`VC 3`, `CR 12`).
+
+### numero-ecriture
+
+**Règle.** Une voie est identifiée par `commune_insee`, `classement` et `numero`. Le schéma accepte plusieurs écritures d'un même numéro (`VC 3`, `VC3`, `vc 3`) : dans un même fichier, les lignes d'une même voie doivent toutes utiliser la même. Deux numéros sont considérés comme le même numéro s'ils ne diffèrent que par les espaces ou par les majuscules et minuscules.
+
+**Lignes concernées.** Les lignes dont le numéro est renseigné. La première écriture rencontrée dans le fichier sert de référence : chaque ligne de la même commune et du même classement qui écrit le numéro autrement est signalée.
+
+| | Ligne | Commune | Classement | Numéro | Résultat |
+| --- | --- | --- | --- | --- | --- |
+| Référence | 2 | `35095` | `Voie communale` | `VC 3` | |
+| Erreur | 3 | `35095` | `Voie communale` | `VC3` | `le numéro « VC3 » est écrit « VC 3 » ligne 2 : une même voie doit avoir la même écriture sur toutes ses lignes` |
+| Valide | 4 | `35095` | `Chemin rural` | `CR3` | |
+
+**Correction.** Choisir une écriture pour chaque voie et l'appliquer à toutes ses lignes. L'écriture n'est pas imposée, mais elle doit être la même d'une ligne à l'autre.
 
 ### largeur-obligatoire
 
@@ -201,6 +232,7 @@ Elles sont définies dans la constante `EMPRISES` du script.
 
 - **Les emprises sont approximatives.** Un point situé en mer ou dans un pays voisin, à l'intérieur d'un de ces rectangles, n'est pas détecté. Les Terres australes et antarctiques françaises et Clipperton ne sont pas couvertes : leurs voies seraient signalées à tort.
 - **Le contrôle des extrémités tolère environ 10 mètres.**
+- **Les écritures du numéro ne sont comparées qu'à l'intérieur d'un fichier.** Deux fichiers peuvent écrire différemment le numéro d'une même voie.
 - **Cellules ignorées.** Une cellule vide, une géométrie qui n'est pas du JSON ou des coordonnées qui ne sont pas de la forme `nombre, nombre` ne sont pas signalées par le script. La validation du schéma les signale.
 - **Pas de contrôle de la cohérence de la géométrie avec la longueur ou la superficie déclarées**, ni de la topologie (auto-intersections, tronçons qui se chevauchent).
 - **Validata n'exécute pas ce script.** Un fichier accepté par Validata peut donc être refusé par le script.

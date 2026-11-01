@@ -32,12 +32,20 @@
       "path": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000685464"
     },
     {
+      "title": "Loi n° 2022-217 du 21 février 2022 (loi 3DS)",
+      "path": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000045197395"
+    },
+    {
+      "title": "Décret n° 2022-1652 du 26 décembre 2022",
+      "path": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000046806953"
+    },
+    {
       "title": "Arrêté du 16 février 2023",
       "path": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047247048"
     }
   ],
   "created": "2026-10-11",
-  "lastModified": "2026-10-17",
+  "lastModified": "2026-10-29",
   "version": "v0.1.1",
   "contributors": [
     {
@@ -47,6 +55,7 @@
     }
   ],
   "missingValues": [""],
+  "fieldsMatch": "subset",
   "fields": [
     {
       "name": "commune_insee",
@@ -59,10 +68,10 @@
     {
       "name": "numero",
       "title": "Numéro",
-      "description": "Numéro de la voie (circulaire du 31 juillet 1961 et arrêté du 16 février 2023) : préfixe de 1 à 3 lettres (par exemple VC, CR, RD, N, A), espace facultatif, numéro, puis suffixe alphabétique facultatif, éventuellement précédé d'un espace (par exemple VC 12, CR1, C12bis, R 14E, RD 26). Pour une voie communale le préfixe doit être C ou VC, pour un chemin rural R ou CR : cette cohérence avec le classement n'est pas vérifiable par Table Schema, elle est contrôlée par le script controles_complementaires.py.",
+      "description": "Numéro de la voie (circulaire du 31 juillet 1961 et arrêté du 16 février 2023) : préfixe de 1 à 3 lettres (par exemple VC, CR, RD, N, A), espace facultatif, numéro, puis suffixe alphabétique facultatif, éventuellement précédé d'un espace (par exemple VC 12, CR1, C12bis, R 14E, RD 26). Pour une voie communale le préfixe doit être C ou VC, pour un chemin rural R ou CR : cette cohérence avec le classement n'est pas vérifiable par Table Schema, elle est contrôlée par le script controles_complementaires.py. Obligatoire pour une voie communale et pour un chemin rural, facultatif pour les autres classements : le schéma l'accepte vide, la règle n'est pas vérifiable par Table Schema et est contrôlée par le script.",
       "type": "string",
       "example": "VC 12",
-      "constraints": { "required": true, "pattern": "^[A-Za-z]{1,3}\\s?\\d+(\\s?[A-Za-z]+)?$" }
+      "constraints": { "required": false, "pattern": "^[A-Za-z]{1,3}\\s?\\d+(\\s?[A-Za-z]+)?$" }
     },
     {
       "name": "classement",
@@ -87,7 +96,7 @@
     {
       "name": "type",
       "title": "Type de voie",
-      "description": "Permet de classer une voie suivant ses caractéristiques.",
+      "description": "Permet de classer une voie suivant ses caractéristiques. La valeur Tronçon est prévue par l'arrêté du 16 février 2023, qui ne la définit pas.",
       "type": "string",
       "example": "Chemin",
       "constraints": {
@@ -146,7 +155,7 @@
     {
       "name": "date_d_affectation",
       "title": "Date d'affectation ou de classement",
-      "description": "Date de création ou de mise à jour de l'arrêté (ou du tableau de recensement), au format AAAA-MM-JJ.",
+      "description": "Date de création ou de mise à jour de l'acte (ou du tableau de recensement), au format AAAA-MM-JJ.",
       "type": "date",
       "example": "1988-05-12",
       "constraints": { "required": true }
@@ -190,7 +199,7 @@
     },
     {
       "name": "servitudes",
-      "title": "Servitudes grévant la voie, inscriptions et intégrations supplémentaires de la voie",
+      "title": "Servitudes grevant la voie, inscriptions et intégrations supplémentaires de la voie",
       "description": "Liste (au format JSON) des servitudes grevant la voie, des attributions supplémentaires ou des inscriptions de la voie à des schémas ou plans nationaux ou locaux. Chaque valeur doit appartenir à la liste autorisée et ne doit pas être répétée (cette dernière règle n'est pas vérifiable par Table Schema, elle est contrôlée par le script controles_complementaires.py).",
       "type": "array",
       "example": "[\"PDIPR\",\"DFCI\"]",

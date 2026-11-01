@@ -3,6 +3,9 @@
 Table Schema ne sait pas exprimer ces règles. Le script les vérifie en complément de la validation du schéma :
 
 - cohérence du numéro avec le classement (voie communale : préfixe C ou VC ; chemin rural : préfixe R ou CR) ;
+- écriture unique du numéro d'une voie dans le fichier (VC 3 et VC3 désignent la même voie) ;
+- numéro obligatoire pour une voie communale (circulaire du 31 juillet 1961) et pour un chemin rural (arrêté du
+  16 février 2023) ;
 - largeur moyenne obligatoire pour une voie communale (circulaire du 31 juillet 1961) ;
 - état obligatoire pour un chemin rural (arrêté du 16 février 2023) ;
 - type de géométrie (LineString ou MultiLineString) ;
@@ -12,7 +15,8 @@ Table Schema ne sait pas exprimer ces règles. Le script les vérifie en complé
 - extrémités de la géométrie cohérentes avec les points initial et final ;
 - servitudes non répétées.
 
-Les cellules vides ou mal formées sont ignorées : c'est le rôle de la validation du schéma de les signaler.
+Les cellules vides ou mal formées sont ignorées : c'est le rôle de la validation du schéma de les signaler. Seuls les
+contrôles des champs obligatoires selon le classement ou la géométrie signalent des cellules vides.
 
 Documentation complète (règles, codes d'erreur, exemples, limites) : CONTROLES.md.
 
@@ -32,10 +36,14 @@ REGLES_NUMERO = {
 
 GEOMETRIES_ATTENDUES = ("LineString", "MultiLineString")
 
-# champ : (code d'erreur, classements pour lesquels il est obligatoire, texte qui l'impose)
+CIRCULAIRE_1961 = "circulaire du 31 juillet 1961"
+ARRETE_2023 = "arrêté du 16 février 2023"
+
+# champ : (code d'erreur, {classement pour lequel il est obligatoire : texte qui l'impose})
 OBLIGATOIRES_PAR_CLASSEMENT = {
-    "largeur_moyenne": ("largeur-obligatoire", ("Voie communale",), "circulaire du 31 juillet 1961"),
-    "etat": ("etat-obligatoire", ("Chemin rural",), "arrêté du 16 février 2023"),
+    "numero": ("numero-obligatoire", {"Voie communale": CIRCULAIRE_1961, "Chemin rural": ARRETE_2023}),
+    "largeur_moyenne": ("largeur-obligatoire", {"Voie communale": CIRCULAIRE_1961}),
+    "etat": ("etat-obligatoire", {"Chemin rural": ARRETE_2023}),
 }
 
 # (nom, longitude min, longitude max, latitude min, latitude max) : emprises approximatives
@@ -114,9 +122,9 @@ def controler_ligne(ligne):
         if not motif.match(numero):
             erreurs.append(("numero", "numero-classement", f"le numéro « {numero} » ne convient pas au classement « {classement} » (préfixe attendu : {prefixes})"))
 
-    for champ, (code, classements, texte) in OBLIGATOIRES_PAR_CLASSEMENT.items():
-        if classement in classements and not (ligne.get(champ) or "").strip():
-            erreurs.append((champ, code, f"obligatoire pour le classement « {classement} » ({texte})"))
+    for champ, (code, textes) in OBLIGATOIRES_PAR_CLASSEMENT.items():
+        if classement in textes and not (ligne.get(champ) or "").strip():
+            erreurs.append((champ, code, f"obligatoire pour le classement « {classement} » ({textes[classement]})"))
 
     ini = lire_geopoint(ligne.get("point_ini_coordonnees") or "")
     fin = lire_geopoint(ligne.get("point_fin_coordonnees") or "")
@@ -156,12 +164,27 @@ def controler_ligne(ligne):
     return erreurs
 
 
+def forme_comparable(numero):
+    """Numéro sans espaces et en majuscules : VC 3, VC3 et vc 3 donnent VC3."""
+    return re.sub(r"\s+", "", numero).upper()
+
+
 def controler(chemin):
     resultat = []
+    # (commune, classement, numéro comparable) : (première écriture du numéro, ligne où elle apparaît)
+    ecritures = {}
     with open(chemin, encoding="utf-8-sig", newline="") as f:
         for numero_ligne, ligne in enumerate(csv.DictReader(f), start=2):
             for champ, code, message in controler_ligne(ligne):
                 resultat.append({"row": numero_ligne, "field": champ, "code": code, "message": message})
+
+            numero = (ligne.get("numero") or "").strip()
+            if numero:
+                cle = ((ligne.get("commune_insee") or "").strip(), (ligne.get("classement") or "").strip(), forme_comparable(numero))
+                premiere, ligne_premiere = ecritures.setdefault(cle, (numero, numero_ligne))
+                if numero != premiere:
+                    message = f"le numéro « {numero} » est écrit « {premiere} » ligne {ligne_premiere} : une même voie doit avoir la même écriture sur toutes ses lignes"
+                    resultat.append({"row": numero_ligne, "field": "numero", "code": "numero-ecriture", "message": message})
     return resultat
 
 

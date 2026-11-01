@@ -171,6 +171,16 @@
       "row": 12,
       "field": "etat",
       "code": "etat-obligatoire"
+    },
+    {
+      "row": 13,
+      "field": "numero",
+      "code": "numero-ecriture"
+    },
+    {
+      "row": 14,
+      "field": "numero",
+      "code": "numero-obligatoire"
     }
   ]
 }
