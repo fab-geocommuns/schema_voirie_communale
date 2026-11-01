@@ -96,7 +96,7 @@
     {
       "name": "type",
       "title": "Type de voie",
-      "description": "Permet de classer une voie suivant ses caractéristiques. La valeur Tronçon est prévue par l'arrêté du 16 février 2023, qui ne la définit pas.",
+      "description": "Permet de classer une voie suivant ses caractéristiques. Les valeurs sont prévues par l'arrêté du 16 février 2023, qui n'en définit aucune.",
       "type": "string",
       "example": "Chemin",
       "constraints": {

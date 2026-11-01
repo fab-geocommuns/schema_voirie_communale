@@ -179,8 +179,9 @@ Statut : **en construction**.
 **Points ouverts.** Ces choix sont connus et pourront être rediscutés :
 
 - **`etat` regroupe deux notions** : le cycle de vie (En projet, En construction, Fermé, Supprimé, Inexistant) et l'état d'entretien (Bon, Moyen, Mauvais, Très mauvais). Une voie fermée **et** en mauvais état ne peut pas être décrite ;
-- **valeur `Tronçon` du champ `type`** : elle figure dans la liste parce que l'arrêté du 16 février 2023 la prévoit, mais le texte ne la définit pas. Son usage reste à préciser ;
-- **voie verte** : cette notion a fait l'objet de nombreux retours et n'est pas positionnée dans le modèle à ce jour. Les pistes à discuter, sans qu'aucune soit retenue, sont l'ajout d'une valeur à la liste du champ `servitudes`, `type` ou `classement`, ce qui n'a aucun effet sur les fichiers existants.
+- **valeurs du champ `type`** : elles figurent dans la liste parce que l'arrêté du 16 février 2023 les prévoit, mais le texte n'en définit aucune. Leur usage reste à préciser ;
+- **voie verte** : cette notion a fait l'objet de nombreux retours et n'est pas positionnée dans le modèle à ce jour. Les pistes à discuter, sans qu'aucune soit retenue, sont l'ajout d'une valeur à la liste du champ `servitudes`, `type` ou `classement`, ce qui n'a aucun effet sur les fichiers existants ;
+- **valeurs « Non renseigné » et « autre »** : le modèle de document des standards du CNIG demande que toutes les listes de valeurs les contiennent. Elles ne sont pas ajoutées à ce jour.
 
 ### Comment contribuer
 
