@@ -24,5 +24,11 @@ jobs:
       run: python controles_complementaires.py exemple-valide.csv
     - name: Vérification de la cohérence des numéros de version
       run: python .github/workflows/assert_version.py
+    - name: Vérification de la concordance du modèle conceptuel (MODELE.md) avec le schéma
+      run: python .github/workflows/assert_modele.py
+    - name: Vérification que le catalogue d'objets (MODELE.md) est à jour avec le schéma et le modèle tableur
+      run: |
+        pip install "openpyxl>=3.1,<4"
+        python .github/workflows/catalogue.py
     - name: Vérification que le fichier d'exemple invalide produit exactement les erreurs attendues
       run: python .github/workflows/check_expected_errors.py

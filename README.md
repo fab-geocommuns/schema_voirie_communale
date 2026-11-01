@@ -58,6 +58,7 @@ Proposer un format commun, simple et fondé sur les formats déjà utilisés par
 ## Organisation du dépôt
 
 - [schema.json](schema.json) : schéma Table Schema du fichier CSV ;
+- [MODELE.md](MODELE.md) : modèle conceptuel, diagramme de classes UML des mêmes données, et catalogue d'objets (attributs et définitions des valeurs des listes, reprises du modèle tableur) ;
 - [modèle tableur](https://fichiers.numerique.gouv.fr/wopi/cdf35f2b-302f-49d0-99e1-e4b38f483f68) : le modèle de données au format tableur, publié en dehors du dépôt. Il évolue **en parallèle** du schéma : toute modification de l'un est reportée dans l'autre ;
 - [controles_complementaires.py](controles_complementaires.py) : script de contrôles que Table Schema ne sait pas exprimer, décrit dans [CONTROLES.md](CONTROLES.md) ;
 - [exemple-valide.csv](exemple-valide.csv) et [exemple-invalide.csv](exemple-invalide.csv) : fichiers d'exemple CSV ; l'exemple valide comporte six lignes : une voie communale (VC) et un chemin rural (CR) avec géométrie (respectivement `MultiLineString` et `LineString`), une VC et un CR sans géométrie, un CR sans largeur moyenne et une VC sans état ; l'exemple invalide comporte treize lignes et illustre, ligne par ligne, les erreurs détectées par le schéma et par le script ;
@@ -155,7 +156,7 @@ Deux contrôles complémentaires :
 1. `frictionless validate` vérifie le **schéma** : colonnes, types, listes de valeurs, contraintes. Un fichier peut aussi être validé en ligne sur [validata.fr](https://validata.fr) (voir ci-dessous) ;
 2. `controles_complementaires.py` vérifie ce que Table Schema ne sait pas exprimer : numéro obligatoire pour une voie communale ou un chemin rural, cohérence du numéro et du classement, écriture unique du numéro d'une voie, largeur moyenne obligatoire pour une voie communale, état obligatoire pour un chemin rural, géométrie (type, coordonnées, extrémités), coordonnées des points obligatoires si la ligne a une géométrie, servitudes répétées. Validata n'exécute pas ce script. Chaque contrôle est décrit dans [CONTROLES.md](CONTROLES.md).
 
-La vérification automatique GitHub contrôle le schéma, l'exemple valide, le script, la cohérence des numéros de version, et que l'exemple invalide produit **exactement** les erreurs de [erreurs-attendues.json](erreurs-attendues.json).
+La vérification automatique GitHub contrôle le schéma, l'exemple valide, le script, la cohérence des numéros de version, la concordance du modèle conceptuel avec le schéma, que le catalogue d'objets est à jour avec le schéma et le modèle tableur, et que l'exemple invalide produit **exactement** les erreurs de [erreurs-attendues.json](erreurs-attendues.json).
 
 ### Valider en ligne avec Validata
 
